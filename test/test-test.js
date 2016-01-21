@@ -1,12 +1,14 @@
 (function (root) {
     "use strict";
 
-    var sinonTest = root.sinonTest || require("../lib/test");
+    var sinonTest = root.sinonTest || require("../");
     var buster = root.buster || require("buster");
     var sinon = root.sinon || require("sinon");
     var nextTick = buster.nextTick || require("buster-core").nextTick;
     var assert = buster.assert;
     var refute = buster.refute;
+
+    var instance = sinonTest.configureTest(sinon);
 
     buster.testCase("sinon-test", {
         setUp: function () {
@@ -31,14 +33,14 @@
 
         "throws if argument is not a function": function () {
             assert.exception(function () {
-                sinonTest({});
+                instance({});
             });
         },
 
         "proxies return value": function () {
             var object = {};
 
-            var result = sinonTest(function () {
+            var result = instance(function () {
                 return object;
             })();
 
@@ -49,7 +51,7 @@
             var method = function () {};
             var object = { method: method };
 
-            sinonTest(function () {
+            instance(function () {
                 this.stub(object, "method").returns(object);
 
                 assert.same(object.method(), object);
@@ -60,7 +62,7 @@
             var method = function () {};
             var object = { method: method };
 
-            sinonTest(function () {
+            instance(function () {
                 this.stub(object, "method");
             }).call({});
 
@@ -72,7 +74,7 @@
             var method2 = function () {};
             var object = { method: method, method2: method2 };
 
-            sinonTest(function () {
+            instance(function () {
                 this.stub(object);
             }).call({});
 
@@ -85,7 +87,7 @@
             var object = { method: method };
 
             assert.exception(function () {
-                sinonTest(function () {
+                instance(function () {
                     this.stub(object, "method");
                     throw new Error();
                 }).call({});
@@ -97,7 +99,7 @@
             var object = { method: method };
 
             try {
-                sinonTest(function () {
+                instance(function () {
                     this.stub(object, "method");
                     throw new Error();
                 }).call({});
@@ -112,7 +114,7 @@
             var method = function () {};
             var object = { method: method };
 
-            sinonTest(function () {
+            instance(function () {
                 this.mock(object).expects("method").returns(object);
 
                 assert.same(object.method(), object);
@@ -121,7 +123,7 @@
 
         "passes on errors to callbacks": function () {
 
-            var fn = sinonTest(function (callback) {
+            var fn = instance(function (callback) {
                 callback(new Error("myerror"));
             });
 
@@ -140,7 +142,7 @@
                 done(args);
             };
 
-            sinonTest(function (callback) {
+            instance(function (callback) {
                 nextTick(function () {
                     callback();
                 });
@@ -160,7 +162,7 @@
                 }
             };
 
-            it("works", sinonTest(function (callback) {
+            it("works", instance(function (callback) {
                 nextTick(function () {
                     callback();
                 });
@@ -181,13 +183,13 @@
                 }
             };
 
-            it("works", sinonTest(function (callback) {
+            it("works", instance(function (callback) {
                 callback();
             }));
         },
 
         "async test with sandbox and spy": function (done) {
-            sinonTest(function (callback) {
+            instance(function (callback) {
                 var globalObj = {
                     addOne: function (arg) {
                         return this.addOneInner(arg);
@@ -208,7 +210,7 @@
         },
 
         "async test preserves additional args and pass them in correct order": function (done) {
-            sinonTest(function (arg1, arg2, callback) {
+            instance(function (arg1, arg2, callback) {
                 assert.equals(arg1, "arg1");
                 assert.equals(typeof (arg2), "object");
                 assert.equals(typeof (callback), "function");
@@ -223,7 +225,7 @@
             var exception;
 
             try {
-                sinonTest(function () {
+                instance(function () {
                     this.mock(object).expects("method").withExactArgs(1).once();
                     object.method(42);
                 }).call({});
@@ -243,7 +245,7 @@
             var object = { method: method };
 
             try {
-                sinonTest(function () {
+                instance(function () {
                     this.mock(object).expects("method");
                 }).call({});
             }
@@ -257,7 +259,7 @@
             var object = { method: method };
 
             try {
-                sinonTest(function () {
+                instance(function () {
                     this.mock(object).expects("method").never();
                     object.method();
                 }).call({});
@@ -274,9 +276,9 @@
                 properties: ["stub", "mock"]
             };
 
-            var instance = sinonTest.withConfig(config);
+            var testInstance = sinonTest.configureTest(sinon, config);
 
-            instance(function (obj, stub, mock) {
+            testInstance(function (obj, stub, mock) {
                 mock(object).expects("method").once();
                 object.method();
 
@@ -286,7 +288,7 @@
 
         "maintains the this value": function () {
             var testCase = {
-                someTest: sinonTest(function () {
+                someTest: instance(function () {
                     return this;
                 })
             };
@@ -295,10 +297,6 @@
         },
 
         "configurable test with sandbox": {
-            tearDown: function () {
-                sinon.config = {};
-            },
-
             "yields stub, mock as arguments": function () {
                 var stubbed, mocked;
                 var obj = { meth: function () {} };
@@ -308,9 +306,9 @@
                     properties: ["stub", "mock"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(function (stub, mock) {
+                testInstance(function (stub, mock) {
                     stubbed = stub(obj, "meth");
                     mocked = mock(obj);
 
@@ -330,9 +328,9 @@
                     properties: ["spy", "stub", "mock"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(function (spy, stub, mock) {
+                testInstance(function (spy, stub, mock) {
                     spied = spy(obj, "meth");
                     spied.restore();
                     stubbed = stub(obj, "meth");
@@ -356,9 +354,9 @@
                     useFakeServer: false
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(function (stub, mock) {
+                testInstance(function (stub, mock) {
                     stubbed = stub(obj, "meth");
                     mocked = mock(obj);
 
@@ -383,9 +381,9 @@
                         properties: ["server", "stub", "mock"]
                     };
 
-                    var instance = sinonTest.withConfig(config);
+                    var testInstance = sinonTest.configureTest(sinon, config);
 
-                    instance(function (serv, stub, mock) {
+                    testInstance(function (serv, stub, mock) {
                         server = serv;
                         stubbed = stub(obj, "meth");
                         mocked = mock(obj);
@@ -407,9 +405,9 @@
                         useFakeServer: sinon.fakeServerWithClock
                     };
 
-                    var instance = sinonTest.withConfig(config);
+                    var testInstance = sinonTest.configureTest(sinon, config);
 
-                    instance(function (serv) {
+                    testInstance(function (serv) {
                         server = serv;
                     })();
 
@@ -426,7 +424,7 @@
                         properties: ["server", "clock", "spy", "stub", "mock", "requests"]
                     };
 
-                    var instance = sinonTest.withConfig(config);
+                    var testInstance = sinonTest.configureTest(sinon, config);
 
                     function testFunction() {
                         assert.equals(arguments.length, 0);
@@ -444,7 +442,7 @@
                         assert.isArray(obj.requests);
                     }
 
-                    instance(testFunction).call({});
+                    testInstance(testFunction).call({});
                 },
 
                 "injects server and clock when only enabling them": function () {
@@ -453,7 +451,7 @@
                         useFakeServer: true
                     };
 
-                    var instance = sinonTest.withConfig(config);
+                    var testInstance = sinonTest.configureTest(sinon, config);
 
                     function testFunction() {
                         assert.equals(arguments.length, 0);
@@ -466,7 +464,7 @@
                         refute.defined(this.sandbox);
                     }
 
-                    instance(testFunction).call({});
+                    testInstance(testFunction).call({});
                 }
             },
 
@@ -478,9 +476,9 @@
                     properties: ["clock"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(function (c) {
+                testInstance(function (c) {
                     clock = c;
                     assert.equals(arguments.length, 1);
                 })();
@@ -497,9 +495,9 @@
                     useFakeTimers: ["Date", "setTimeout", "setImmediate"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(function (c) {
+                testInstance(function (c) {
                     props = {
                         clock: c,
                         Date: Date,
@@ -529,7 +527,7 @@
                     properties: ["clock"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
                 function testFunction() {
                     assert.same(this, testCase);
@@ -540,7 +538,7 @@
                     refute.defined(this.mock);
                 }
 
-                instance(testFunction).call(testCase);
+                testInstance(testFunction).call(testCase);
             },
 
             "injects functions into test case by default": function () {
@@ -552,7 +550,7 @@
                     assert.isObject(this.clock);
                 }
 
-                sinonTest(testFunction).call({});
+                instance(testFunction).call({});
             },
 
             "injects sandbox": function () {
@@ -566,15 +564,15 @@
                     properties: ["sandbox", "spy"]
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
 
-                instance(testFunction).call({});
+                testInstance(testFunction).call({});
             },
 
             "remove injected properties afterwards": function () {
                 var testCase = {};
 
-                sinonTest(function () {}).call(testCase);
+                instance(function () {}).call(testCase);
 
                 refute.defined(testCase.spy);
                 refute.defined(testCase.stub);
@@ -585,16 +583,16 @@
                 refute.defined(testCase.requests);
             },
 
-            "uses sinonTest to fake time": function () {
+            "uses test to fake time": function () {
                 var config = {
                     useFakeTimers: true
                 };
 
-                var instance = sinonTest.withConfig(config);
+                var testInstance = sinonTest.configureTest(sinon, config);
                 var called;
 
                 var testCase = {
-                    test: instance(function () {
+                    test: testInstance(function () {
                         var spy = this.spy();
                         setTimeout(spy, 19);
                         this.clock.tick(19);

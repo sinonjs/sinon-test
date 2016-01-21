@@ -2,13 +2,16 @@
     "use strict";
 
     var buster = root.buster || require("buster");
+    /*
     var sinon = root.sinon || require("sinon");
     var sinonTest = root.sinonTest || require("../lib/test");
     var sinonTestCase = root.sinonTest && root.sinonTest.testCase || require("../lib/test_case");
     var assert = buster.assert;
     var refute = buster.refute;
+    */
 
     buster.testCase("sinon-test.testCase", {
+        /*
         "throws without argument": function () {
             assert.exception(function () {
                 sinonTestCase();
@@ -21,7 +24,6 @@
             }, "TypeError");
         },
 
-        /*
         "only wraps functions with test prefix": sinonTest(function () {
             this.spy(obj, "test");
 

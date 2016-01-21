@@ -13,9 +13,6 @@
   ],
   "author": "Christian Johansen",
   "license": "BSD-3-Clause",
-  "dependencies": {
-    "sinon": "git+https://github.com/sinonjs/sinon.git"
-  },
   "devDependencies": {
     "browserify": "^12.0.1",
     "buster": "0.7.18",
@@ -23,6 +20,7 @@
     "buster-istanbul": "^0.1.15",
     "eslint": "^1.7.1",
     "eslint-config-defaults": "^2.1.0",
-    "pre-commit": "^1.1.2"
+    "pre-commit": "^1.1.2",
+    "sinon": "git+https://github.com/sinonjs/sinon.git"
   }
 }

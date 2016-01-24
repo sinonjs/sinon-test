@@ -1,14 +1,19 @@
+"use strict";
+
 var config = module.exports;
 
 config.node = {
     environment: "node",
     rootPath: "../",
+    testHelpers: [
+        "test/test-helper.js"
+    ],
     sources: [
         "lib/index.js",
         "lib/*.js"
     ],
     tests: [
-        "test/**/*.js"
+        "test/**/*-test.js"
     ]
 };
 

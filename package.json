@@ -14,7 +14,8 @@
   "author": "Christian Johansen",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "browserify": "^12.0.1",
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
     "buster": "0.7.18",
     "buster-core": "^0.6.4",
     "buster-istanbul": "^0.1.15",
@@ -22,5 +23,8 @@
     "eslint-config-defaults": "^2.1.0",
     "pre-commit": "^1.1.2",
     "sinon": "git+https://github.com/sinonjs/sinon.git"
+  },
+  "browserify-shim": {
+    "buster": "global:buster"
   }
 }

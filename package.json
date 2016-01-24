@@ -12,6 +12,10 @@
     "eslint-pre-commit"
   ],
   "author": "Christian Johansen",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/sinonjs/sinon-test.git"
+  },
   "license": "BSD-3-Clause",
   "devDependencies": {
     "browserify": "^13.0.0",

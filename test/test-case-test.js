@@ -1,46 +1,52 @@
 "use strict";
 
 var buster = require("buster");
-/*
-var sinon = root.sinon || require("sinon");
-var sinonTest = root.sinonTest || require("../lib/test");
-var sinonTestCase = root.sinonTest && root.sinonTest.testCase || require("../lib/test_case");
+var sinon = require("sinon");
+var sinonTestCase = require("../lib/test_case");
+
 var assert = buster.assert;
 var refute = buster.refute;
-*/
+
+var testCaseInstance;
+
 
 buster.testCase("sinon-test.testCase", {
-    /*
+    setUp: function () {
+        testCaseInstance = sinonTestCase.configure(sinon);
+    },
+
     "throws without argument": function () {
         assert.exception(function () {
-            sinonTestCase();
+            testCaseInstance();
         }, "TypeError");
     },
 
     "throws without object": function () {
         assert.exception(function () {
-            sinonTestCase(function () {});
+            testCaseInstance(function () {});
         }, "TypeError");
     },
 
-    "only wraps functions with test prefix": sinonTest(function () {
-        this.spy(obj, "test");
+    /*
+    "only wraps functions with test prefix": testInstance(function () {
+        this.spy(sinon, "test");
 
         var testc = {
             testA: function () {},
             doB: function () {}
         };
 
-        sinonTestCase(testc);
+        testCaseInstance(testc);
 
         assert.isFunction(testc.doB);
         assert(sinon.test.calledWith(testc.testA));
         assert.isFalse(sinon.test.calledWith(testc.doB));
     }),
+    */
 
     "removes setUp method": function () {
         var test = { setUp: function () {} };
-        var result = sinonTestCase(test);
+        var result = testCaseInstance(test);
 
         refute.defined(result.setUp);
         refute.defined(result["test setUp"]);
@@ -48,7 +54,7 @@ buster.testCase("sinon-test.testCase", {
 
     "removes tearDown method": function () {
         var test = { tearDown: function () {} };
-        var result = sinonTestCase(test);
+        var result = testCaseInstance(test);
 
         refute.defined(result.tearDown);
         refute.defined(result["test tearDown"]);
@@ -56,7 +62,7 @@ buster.testCase("sinon-test.testCase", {
 
     "calls setUp before any test": function () {
         var test = { setUp: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
-        var result = sinonTestCase(test);
+        var result = testCaseInstance(test);
         result.test();
         result.test2();
 
@@ -67,7 +73,7 @@ buster.testCase("sinon-test.testCase", {
 
     "calls tearDown after any test": function () {
         var test = { tearDown: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
-        var result = sinonTestCase(test);
+        var result = testCaseInstance(test);
         result.test();
         result.test2();
 
@@ -80,7 +86,7 @@ buster.testCase("sinon-test.testCase", {
 
     "calls tearDown even if test throws": function () {
         var test = { tearDown: sinon.stub(), test: sinon.stub().throws() };
-        var result = sinonTestCase(test);
+        var result = testCaseInstance(test);
 
         assert.exception(function () {
             result.test();
@@ -97,7 +103,7 @@ buster.testCase("sinon-test.testCase", {
             tearDown: sinon.stub()
         };
 
-        var result = sinonTestCase(testCase);
+        var result = testCaseInstance(testCase);
 
         try {
             result.test();
@@ -116,7 +122,7 @@ buster.testCase("sinon-test.testCase", {
             test: sinon.stub().throws()
         };
 
-        var result = sinonTestCase(testCase);
+        var result = testCaseInstance(testCase);
 
         try {
             result.test();
@@ -132,7 +138,7 @@ buster.testCase("sinon-test.testCase", {
         var myMeth = function () {};
         var myObj = { meth: myMeth };
 
-        var testCase = sinonTestCase({
+        var testCase = testCaseInstance({
             testA: function () {
                 this.stub(myObj, "meth");
 
@@ -151,7 +157,7 @@ buster.testCase("sinon-test.testCase", {
         var myMeth2 = function () {};
         var myObj = { meth: myMeth, meth2: myMeth2 };
 
-        var testCase = sinonTestCase({
+        var testCase = testCaseInstance({
             testA: function () {
                 this.stub(myObj);
 
@@ -172,7 +178,7 @@ buster.testCase("sinon-test.testCase", {
         var myMeth = function () {};
         var myObj = { meth: myMeth };
 
-        var testCase = sinonTestCase({
+        var testCase = testCaseInstance({
             setUp: function () {
                 this.stub(myObj, "meth");
             },
@@ -193,7 +199,7 @@ buster.testCase("sinon-test.testCase", {
         var myMeth2 = function () {};
         var myObj = { meth: myMeth, meth2: myMeth2 };
 
-        var testCase = sinonTestCase({
+        var testCase = testCaseInstance({
             setUp: function () {
                 this.stub(myObj);
             },
@@ -214,7 +220,7 @@ buster.testCase("sinon-test.testCase", {
     "allows the use of helper methods": function () {
         var helper = sinon.spy();
 
-        var testC = sinonTestCase({
+        var testC = testCaseInstance({
             doIt: helper,
 
             testIt: function () {
@@ -231,7 +237,7 @@ buster.testCase("sinon-test.testCase", {
     },
 
     "returns result of test function": function () {
-        var testC = sinonTestCase({
+        var testC = testCaseInstance({
             testIt: sinon.stub().returns(42)
         });
 
@@ -239,7 +245,7 @@ buster.testCase("sinon-test.testCase", {
     },
 
     "returns result of test function with setUp": function () {
-        var testC = sinonTestCase({
+        var testC = testCaseInstance({
             setUp: sinon.spy(),
             testIt: sinon.stub().returns(42)
         });
@@ -248,7 +254,7 @@ buster.testCase("sinon-test.testCase", {
     },
 
     "returns result of test function with setUp and teardown": function () {
-        var testC = sinonTestCase({
+        var testC = testCaseInstance({
             setUp: sinon.spy(),
             tearDown: sinon.spy(),
             testIt: sinon.stub().returns(42)
@@ -256,7 +262,6 @@ buster.testCase("sinon-test.testCase", {
 
         assert.equals(testC.testIt(), 42);
     }
-    */
 });
 
 

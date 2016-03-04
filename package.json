@@ -26,7 +26,10 @@
     "eslint": "^1.7.1",
     "eslint-config-defaults": "^2.1.0",
     "pre-commit": "^1.1.2",
-    "sinon": "git+https://github.com/sinonjs/sinon.git"
+    "sinon": "^2.0.0-pre"
+  },
+  "peerDependencies": {
+    "sinon": "^2.0.0-pre"
   },
   "browserify-shim": {
     "buster": "global:buster"

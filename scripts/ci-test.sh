@@ -29,4 +29,4 @@ echo
 echo "starting buster-test (packaged)"
 mkdir -p pkg
 ./node_modules/.bin/browserify ./test/*-test.js ./test/test-helper.js --exclude buster -t browserify-shim -o pkg/sinon-test-testrunner.js
-./node_modules/buster/bin/buster-test --config test/buster-packaged.js
+./node_modules/buster/bin/buster-test -o --config test/buster-packaged.js

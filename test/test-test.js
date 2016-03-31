@@ -3,6 +3,7 @@
 var sinonTest = require("../");
 var buster = require("buster");
 var sinon = require("sinon");
+var Promise = require("bluebird");
 
 var nextTick = buster.nextTick;
 var assert = buster.assert;
@@ -218,7 +219,24 @@ buster.testCase("sinon-test", {
             callback();
         }).call({}, "arg1", {}, done);
     },
-
+    "promises": {
+        "cleanup on resolution": function (done) {
+            var obj = {foo: function () {}};
+            var promise = instance(function () {
+                var spy = this.spy(obj, "foo");
+                return Promise.delay(1).then(function () {
+                    obj.foo();
+                }).then(function () {
+                    assert(spy.calledOnce);
+                });
+            }).call({});
+            return promise.then(function () {
+                done();
+            }).catch(function (err) {
+                done(err);
+            });
+        }
+    },
     "verifies mocks": function () {
         var method = function () {};
         var object = { method: method };

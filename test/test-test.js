@@ -4,7 +4,7 @@ var sinonTest = require("../");
 var buster = require("buster");
 var sinon = require("sinon");
 
-var nextTick = buster.nextTick;
+var nextTick = buster.nextTick || require("buster-core").nextTick;
 var assert = buster.assert;
 var refute = buster.refute;
 

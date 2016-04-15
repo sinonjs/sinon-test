@@ -94,6 +94,19 @@ buster.testCase("sinon-test", {
         }, "Error");
     },
 
+    "throws when an async method throws": function () {
+        var method = function () {};
+        var object = { method: method };
+        var fakeDone = function () {};
+
+        assert.exception(function () {
+            instance(function (done) { // eslint-disable-line no-unused-vars
+                this.stub(object, "method");
+                throw new Error();
+            }).call({}, fakeDone);
+        }, "Error");
+    },
+
     "restores stub when method throws": function () {
         var method = function () {};
         var object = { method: method };

@@ -2,7 +2,7 @@
 > Test Framework helpers for SinonJS
 
 ## Help wanted
-The core team of Sinon would like to focus on the core of Sinon, and so we are splitting out related helper functionality into separate packages such as this one. An
+We could need a hand maintaining this project to enable us to focus on the core Sinon project. [Want to help us out](https://github.com/sinonjs/sinon-test/issues/12)? 
 
 ## Installation
 

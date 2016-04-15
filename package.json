@@ -18,6 +18,7 @@
   },
   "license": "BSD-3-Clause",
   "devDependencies": {
+    "bluebird": "^3.3.4",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "buster": "0.7.18",
@@ -32,6 +33,7 @@
     "sinon": "^2.0.0-pre"
   },
   "browserify-shim": {
-    "buster": "global:buster"
+    "buster": "global:buster",
+    "bluebird": "Promise"
   }
 }

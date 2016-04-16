@@ -3,6 +3,7 @@
 var sinonTest = require("../");
 var buster = require("buster");
 var sinon = require("sinon");
+var Promise = require("es6-promise").Promise;
 
 var nextTick = buster.nextTick || require("buster-core").nextTick;
 var assert = buster.assert;
@@ -105,6 +106,56 @@ buster.testCase("sinon-test", {
                 throw new Error();
             }).call({}, fakeDone);
         }, "Error");
+    },
+
+    "restores stub after promise resolves": function () {
+        var object = {};
+
+        var promise = instance(function () {
+            return new Promise(function (resolve) {
+                nextTick(function () { resolve(object); });
+            });
+        }).call({});
+
+        return promise.then(function (result) {
+            assert.same(result, object);
+        });
+    },
+
+    "restores stub after promise is resolved": function () {
+        var method = function () {};
+        var object = { method: method };
+
+        var promise = instance(function () {
+            this.stub(object, "method");
+            return new Promise(function (resolve) {
+                nextTick(function () { resolve(object); });
+            });
+        }).call({});
+
+        assert.equals(object.method === method, false);
+
+        return promise.then(function () {
+            assert.same(object.method, method);
+        });
+    },
+
+    "restores stub after promise is rejected": function () {
+        var method = function () {};
+        var object = { method: method };
+
+        var promise = instance(function () {
+            this.stub(object, "method");
+            return new Promise(function (_, reject) {
+                nextTick(function () { reject(new Error()); });
+            });
+        }).call({});
+
+        assert.equals(object.method === method, false);
+
+        return promise.then(null, function (err) {
+            assert.equals(err instanceof Error, true);
+        });
     },
 
     "restores stub when method throws": function () {

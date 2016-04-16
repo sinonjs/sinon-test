@@ -108,7 +108,7 @@ buster.testCase("sinon-test", {
         }, "Error");
     },
 
-    "restores stub after promise resolves": function (done) {
+    "restores stub after promise resolves": function () {
         var object = {};
 
         var promise = instance(function () {
@@ -117,13 +117,12 @@ buster.testCase("sinon-test", {
             });
         }).call({});
 
-        promise.then(function (result) {
+        return promise.then(function (result) {
             assert.same(result, object);
-            done();
         });
     },
 
-    "restores stub after promise is resolved": function (done) {
+    "restores stub after promise is resolved": function () {
         var method = function () {};
         var object = { method: method };
 
@@ -136,13 +135,12 @@ buster.testCase("sinon-test", {
 
         assert.equals(object.method === method, false);
 
-        promise.then(function () {
+        return promise.then(function () {
             assert.same(object.method, method);
-            done();
         });
     },
 
-    "restores stub after promise is rejected": function (done) {
+    "restores stub after promise is rejected": function () {
         var method = function () {};
         var object = { method: method };
 
@@ -155,9 +153,8 @@ buster.testCase("sinon-test", {
 
         assert.equals(object.method === method, false);
 
-        promise.then(null, function (err) {
+        return promise.then(null, function (err) {
             assert.equals(err instanceof Error, true);
-            done();
         });
     },
 

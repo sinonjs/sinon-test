@@ -12,7 +12,7 @@ via [npm (node package manager)](https://github.com/npm/npm)
 
 ## Usage
 
-See the [sinon project homepage](http://sinonjs.org/) for documentation on usage.
+See the [sinon documentation](http://sinonjs.org/docs/#sinon-test) for documentation on usage.
 
 `sinon-test` instances need to be configured with a `sinon` instance (version 2+) before they can be used; you can emulate the sinon 1.x methods with the following:
 
@@ -36,3 +36,9 @@ describe('my function', function() {
 });
 
 ```
+In order to configure with options, a configuration hash can be passed as a 2nd argument to `sinonTest.configureTest`:
+
+```js
+sinon.test = sinonTest.configureTest(sinon, {useFakeTimers: false});
+```
+

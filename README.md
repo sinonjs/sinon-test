@@ -11,7 +11,7 @@ So instead of doing this (using [Mocha](https://mochajs.org/) syntax):
 var spy1;
 var spy2;
 
-afterEach(()={
+afterEach(()=>{
     spy1.restore();
     spy2.restore();
 });

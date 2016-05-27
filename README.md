@@ -1,8 +1,55 @@
 # Sinon Test
-> Test Framework helpers for SinonJS
+> Automatic sandbox setup and teardown for SinonJS
 
-## Help wanted
-We could need a hand maintaining this project to enable us to focus on the core Sinon project. [Want to help us out](https://github.com/sinonjs/sinon-test/issues/12)? 
+## Why?
+Instead of writing tedious setup and teardown code for each
+individual test case you can let Sinon do all the cleanup for you.
+
+So instead of doing this (using [Mocha](https://mochajs.org/) syntax):
+
+```javascript
+var spy1;
+var spy2;
+
+afterEach(()={
+    spy1.restore();
+    spy2.restore();
+});
+
+it('should do something', ()=>{
+    spy1 = sinon.spy(myFunc);
+    spy2 = sinon.spy(myOtherFunc);
+    myFunc(1);
+    myFunc(2);
+    assert(spy1.calledWith(1));
+    assert(spy1.calledWith(2));
+});
+```
+
+You could write just this
+
+```javascript
+it('should do something', sinon.test(function(){
+    var spy1 = this.spy(myFunc);
+    var spy2 = this.spy(myOtherFunc);
+    myFunc(1);
+    myFunc(2);
+    assert(spy1.calledWith(1));
+    assert(spy1.calledWith(2));
+})); //auto-cleanup
+```
+
+Sinon will take care of removing all the spies and stubs
+from the wrapped functions for you. It does this by using
+`sinon.sandbox` internally.
+
+Do notice that
+we use a `function` and not a arrow function (ES2015)
+when wrapping the test with `sinon.test` as it needs
+to be able to access the `this` pointer used inside
+of the function.
+
+See the [Usage](#usage) section for more details.
 
 ## Installation
 
@@ -24,15 +71,15 @@ var assert = require('assert');
 sinon.test = sinonTest.configureTest(sinon);
 sinon.testCase = sinonTest.configureTestCase(sinon);
 
-describe('my function', function() { 
+describe('my function', function() {
     var myFunc = require('./my-func');
-    
+
     it('should do something', sinon.test(function(){
         var spy = this.spy(myFunc);
         myFunc(1);
         assert(spy.calledWith(1));
     })); //auto-cleanup
-    
+
 });
 
 ```

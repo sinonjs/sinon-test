@@ -10,8 +10,8 @@ var refute = buster.refute;
 var testCaseInstance;
 
 
-buster.testCase("sinon-test.testCase", {
-    setUp: function () {
+module.exports = {
+    beforeEach: function () {
         testCaseInstance = sinonTestCase.configure(sinon);
     },
 
@@ -262,6 +262,4 @@ buster.testCase("sinon-test.testCase", {
 
         assert.equals(testC.testIt(), 42);
     }
-});
-
-
+};

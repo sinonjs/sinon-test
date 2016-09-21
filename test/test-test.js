@@ -5,14 +5,16 @@ var buster = require("buster");
 var sinon = require("sinon");
 var Promise = require("es6-promise").Promise;
 
-var nextTick = buster.nextTick || require("buster-core").nextTick;
+var nextTick = typeof process !== "undefined" && process.nextTick || function (fn) {
+    setTimeout(fn, 0);
+};
 var assert = buster.assert;
 var refute = buster.refute;
 
 var instance = sinonTest.configureTest(sinon);
 
-buster.testCase("sinon-test", {
-    setUp: function () {
+module.exports = {
+    beforeEach: function () {
         this.boundTestCase = function () {
             var properties = {
                 fn: function () {
@@ -670,4 +672,4 @@ buster.testCase("sinon-test", {
             assert(called);
         }
     }
-});
+};

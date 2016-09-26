@@ -329,19 +329,19 @@ module.exports = {
     },
 
     "sync tests with thenable return value": {
-        setUp: function () {
+        beforeEach: function () {
             var method = this.method = function () {};
             var object = this.object = {method: method};
             var promise = this.promise = stubPromise();
 
-            this.test = instance(function () {
+            this.sinonTest = instance(function () {
                 this.stub(object, "method");
 
                 return promise;
             });
         },
 
-        tearDown: function () {
+        afterEach: function () {
             // ensure sandbox is restored
             if (this.promise.index < this.promise.then.callCount) {
                 this.promise.resolve();
@@ -350,7 +350,7 @@ module.exports = {
 
         "should listen to returned promise": function (done) {
             var self = this;
-            var promise = self.test.call({});
+            var promise = self.sinonTest.call({});
 
             assert(promise.then.calledOnce);
             assert(promise.then.getCall(0).args.length, 2);
@@ -366,7 +366,7 @@ module.exports = {
         },
 
         "restores sandbox after promise is fulfilled": function () {
-            var promise = this.test.call({});
+            var promise = this.sinonTest.call({});
 
             promise.resolve();
 
@@ -374,7 +374,7 @@ module.exports = {
         },
 
         "restores sandbox after promise is rejected": function () {
-            var promise = this.test.call({});
+            var promise = this.sinonTest.call({});
             var error = new Error("expected");
 
             assert.exception(
@@ -389,7 +389,7 @@ module.exports = {
         },
 
         "ensures test rejects with a non-falsy value": function () {
-            var promise = this.test.call({});
+            var promise = this.sinonTest.call({});
 
             assert.exception(
                 function () {
@@ -403,11 +403,11 @@ module.exports = {
     },
 
     "sync tests with A+ promise returned": {
-        requiresSupportFor: {
-            Promise: typeof Promise !== "undefined"
-        },
+        beforeEach: function () {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
 
-        setUp: function () {
             this.method = function () {};
             this.object = {method: this.method};
         },
@@ -494,7 +494,7 @@ module.exports = {
             });
 
 
-            return test.call({}).catch(function (error) {
+            test.call({}).catch(function (error) {
                 assert.equals(error.name, "ExpectationError");
                 assert.match(error.message, /Expected method\(1\) once/);
 
@@ -652,10 +652,6 @@ module.exports = {
         },
 
         "browser options": {
-            requiresSupportFor: {
-                "ajax/browser": typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined"
-            },
-
             "yields server when faking xhr": function () {
                 var stubbed, mocked, server;
                 var obj = { meth: function () {} };

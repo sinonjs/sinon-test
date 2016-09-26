@@ -1,2 +1,2 @@
 --ui exports
-test/helpers.js
+--require test/helpers.js

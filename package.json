@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "./scripts/ci-test.sh",
+    "test": "mocha",
     "lint": "eslint .",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
@@ -21,11 +21,10 @@
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "buster": "0.7.18",
-    "buster-core": "^0.6.4",
-    "buster-istanbul": "^0.1.15",
     "es6-promise": "^3.1.2",
     "eslint": "^1.7.1",
     "eslint-config-defaults": "^2.1.0",
+    "mocha": "^3.0.2",
     "phantomjs-prebuilt": "^2.1.7",
     "pre-commit": "^1.1.2",
     "sinon": "^2.0.0-pre"

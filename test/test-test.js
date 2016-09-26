@@ -13,6 +13,35 @@ var refute = buster.refute;
 
 var instance = sinonTest.configureTest(sinon);
 
+// promise-like structure
+function stubPromise() {
+    var thenStub = sinon.stub();
+    var promise = {
+        then: thenStub,
+        index: 0,
+        resolve: function (object) {
+            var callback = thenStub.getCall(this.index++).args[0];
+            if (object) {
+                callback(object);
+            } else {
+                callback();
+            }
+        },
+        reject: function (error) {
+            var callback = thenStub.getCall(this.index++).args[1];
+            if (error) {
+                callback(error);
+            } else {
+                callback();
+            }
+        }
+    };
+
+    thenStub.returns(promise);
+
+    return promise;
+}
+
 module.exports = {
     beforeEach: function () {
         this.boundTestCase = function () {
@@ -283,6 +312,195 @@ module.exports = {
 
             callback();
         }).call({}, "arg1", {}, done);
+    },
+
+    "async tests should not allow thenables to be returned": function () {
+        var thenable = {
+            then: function () {
+            }
+        };
+        var test = instance(function (_) { // eslint-disable-line no-unused-vars
+            return thenable;
+        });
+
+        assert.exception(test, {
+            message: /callback .* promise.* both/
+        });
+    },
+
+    "sync tests with thenable return value": {
+        setUp: function () {
+            var method = this.method = function () {};
+            var object = this.object = {method: method};
+            var promise = this.promise = stubPromise();
+
+            this.test = instance(function () {
+                this.stub(object, "method");
+
+                return promise;
+            });
+        },
+
+        tearDown: function () {
+            // ensure sandbox is restored
+            if (this.promise.index < this.promise.then.callCount) {
+                this.promise.resolve();
+            }
+        },
+
+        "should listen to returned promise": function (done) {
+            var self = this;
+            var promise = self.test.call({});
+
+            assert(promise.then.calledOnce);
+            assert(promise.then.getCall(0).args.length, 2);
+            assert.isFunction(promise.then.getCall(0).args[0]);
+            assert.isFunction(promise.then.getCall(0).args[1]);
+
+            // allow any other actions to take place
+            nextTick(function () {
+                refute.same(self.object.method, self.method, "should wait to restore stubs");
+
+                done();
+            });
+        },
+
+        "restores sandbox after promise is fulfilled": function () {
+            var promise = this.test.call({});
+
+            promise.resolve();
+
+            assert.same(this.object.method, this.method);
+        },
+
+        "restores sandbox after promise is rejected": function () {
+            var promise = this.test.call({});
+            var error = new Error("expected");
+
+            assert.exception(
+                function () {
+                    promise.reject(error);
+                },
+                {message: "expected"},
+                "should re-throw error from rejected promise"
+            );
+
+            assert.same(this.object.method, this.method);
+        },
+
+        "ensures test rejects with a non-falsy value": function () {
+            var promise = this.test.call({});
+
+            assert.exception(
+                function () {
+                    promise.reject(false);
+                },
+                {message: /rejected.*falsy/}
+            );
+
+            assert.same(this.object.method, this.method);
+        }
+    },
+
+    "sync tests with A+ promise returned": {
+        requiresSupportFor: {
+            Promise: typeof Promise !== "undefined"
+        },
+
+        setUp: function () {
+            this.method = function () {};
+            this.object = {method: this.method};
+        },
+
+        "restores the sandbox when the promise is fulfilled": function (done) {
+            var self = this;
+            var expected = {};
+            var test = instance(function () {
+                var sandbox = this;
+
+                return new Promise(function (resolve) {
+                    sandbox.stub(self.object, "method");
+
+                    resolve(expected);
+                });
+            });
+
+            test.call({}).then(function (thing) {
+                assert.equals(self.object.method, self.method);
+                assert.same(thing, expected);
+
+                done();
+            });
+        },
+
+        "restores the sandbox when the promise is rejected": function (done) {
+            var self = this;
+            var test = instance(function () {
+                var sandbox = this;
+
+                return new Promise(function (_, reject) {
+                    sandbox.stub(self.object, "method");
+
+                    reject();
+                });
+            });
+
+            test.call({}).catch(function () {
+                assert.equals(self.object.method, self.method);
+
+                done();
+            });
+        },
+
+        "ensures test rejects with a non-falsy value": function (done) {
+            var self = this;
+            var test = instance(function () {
+                return Promise.reject(false);
+            });
+
+            test.call({}).catch(function (error) {
+                assert.match(error.message, /rejected.*falsy/);
+                assert.same(self.object.method, self.method);
+
+                done();
+            });
+        },
+
+        "re-throws the error if the promise is rejected": function (done) {
+            var expectedError = new Error("expected");
+            var test = instance(function () {
+                return Promise.reject(expectedError);
+            });
+
+            test.call({}).catch(function (error) {
+                assert.equals(error, expectedError);
+
+                done();
+            });
+        },
+
+        "verifies mocks when promise is resolved": function (done) {
+            var self = this;
+            var test = instance(function () {
+                var sandbox = this;
+
+                return new Promise(function (resolve) {
+                    sandbox.mock(self.object).expects("method").withExactArgs(1).once();
+
+                    self.object.method(42);
+
+                    resolve();
+                });
+            });
+
+
+            return test.call({}).catch(function (error) {
+                assert.equals(error.name, "ExpectationError");
+                assert.match(error.message, /Expected method\(1\) once/);
+
+                done();
+            });
+        }
     },
 
     "verifies mocks": function () {

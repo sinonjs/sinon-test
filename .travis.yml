@@ -12,6 +12,10 @@ cache:
 
 before_install:
   - npm config set strict-ssl false
+  - npm install coveralls
+
+after_success:
+  - npm run coverage
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources

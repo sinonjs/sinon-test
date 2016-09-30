@@ -4,7 +4,8 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha",
+    "coverage": "nyc report --reporter text-lcov | coveralls",
+    "test": "nyc mocha",
     "lint": "eslint .",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
@@ -25,6 +26,7 @@
     "eslint": "^1.7.1",
     "eslint-config-defaults": "^2.1.0",
     "mocha": "^3.0.2",
+    "nyc": "^8.3.0",
     "phantomjs-prebuilt": "^2.1.7",
     "pre-commit": "^1.1.2",
     "sinon": "^2.0.0-pre"

@@ -3,7 +3,7 @@
 git stash -q --keep-index
 
 # Test prospective commit
-git diff-index --cached HEAD --name-only --diff-filter ACMR | egrep '.js$' | xargs $(npm bin)/eslint
+git diff-index --cached HEAD --name-only --diff-filter ACMR | egrep '.js$' | xargs -i $(npm bin)/eslint {}
 RESULT=$?
 
 git stash pop -q

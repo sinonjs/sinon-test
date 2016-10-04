@@ -20,7 +20,7 @@ after_success:
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources
-  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then $(npm bin)/eslint .; fi'
+  - 'if [ "x$TRAVIS_NODE_VERSION" = "x6.7" ]; then $(npm bin)/eslint .; fi'
 
 git:
   depth: 1

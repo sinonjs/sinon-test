@@ -4,6 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "build": "rollup -c | uglifyjs --mangle --compress if_return,dead_code,unsafe,unsafe_comps,join_vars,comparisons,loops,collapse_vars,cascade,pure_getters > dist/sinon-test.js",
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
     "lint": "eslint .",
@@ -19,8 +20,6 @@
   },
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "browserify-shim": "^3.8.12",
     "buster": "0.7.18",
     "es6-promise": "^4.0.5",
     "eslint": "^3.7.1",
@@ -29,7 +28,10 @@
     "nyc": "^8.3.0",
     "phantomjs-prebuilt": "^2.1.7",
     "pre-commit": "^1.1.2",
-    "sinon": "^2.0.0-pre"
+    "rollup": "^0.36.1",
+    "rollup-plugin-commonjs": "^5.0.4",
+    "sinon": "^2.0.0-pre",
+    "uglify-js": "^2.7.3"
   },
   "peerDependencies": {
     "sinon": "^2.0.0-pre"

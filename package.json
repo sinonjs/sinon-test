@@ -29,7 +29,7 @@
     "phantomjs-prebuilt": "^2.1.7",
     "pre-commit": "^1.1.2",
     "rollup": "^0.38.0",
-    "rollup-plugin-commonjs": "^5.0.4",
+    "rollup-plugin-commonjs": "^6.0.1",
     "sinon": "^2.0.0-pre",
     "uglify-js": "^2.7.3"
   },

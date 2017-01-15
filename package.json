@@ -10,6 +10,9 @@
     "lint": "eslint .",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
+  "greenkeeper":{
+    "ignore": ["rollup"]
+  },
   "pre-commit": [
     "eslint-pre-commit"
   ],

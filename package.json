@@ -4,7 +4,9 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c | uglifyjs --mangle --compress if_return,dead_code,unsafe,unsafe_comps,join_vars,comparisons,loops,collapse_vars,cascade,pure_getters > dist/sinon-test.js",
+    "build": "run-s build:dist-folder build:bundle",
+    "build:bundle": "rollup -c | uglifyjs --mangle --compress if_return,dead_code,unsafe,unsafe_comps,join_vars,comparisons,loops,collapse_vars,cascade,pure_getters > dist/sinon-test.js",
+    "build:dist-folder": "mkdirp dist",
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
     "lint": "eslint .",
@@ -30,6 +32,7 @@
     "es6-promise": "^4.0.5",
     "eslint": "^3.7.1",
     "eslint-config-defaults": "^9.0.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.0.2",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.1.2",

@@ -59,7 +59,7 @@ via [npm (node package manager)](https://github.com/npm/npm)
 
 or just add it as a `<script src="dist/sinon-test.js"></script>`
 tag to the html where you write your tests. A pre-built browser
-version is found in [dist/sinon-test.js](./dist/sinon-test.js).
+version can be found in the NPM package under `dist/sinon-test.js`.
 
 ## Usage
 

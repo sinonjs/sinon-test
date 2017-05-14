@@ -33,7 +33,7 @@
     "eslint": "^3.7.1",
     "eslint-config-defaults": "^9.0.0",
     "mkdirp": "^0.5.1",
-    "mocha": "^3.0.2",
+    "mocha": "^3.4.0",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.1.2",
     "phantomjs-prebuilt": "^2.1.7",

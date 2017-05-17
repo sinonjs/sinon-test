@@ -1,14 +1,13 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("sinon");
 var sinonTestCase = require("../lib/test_case");
 
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
 var testCaseInstance;
-
 
 module.exports = {
     beforeEach: function () {

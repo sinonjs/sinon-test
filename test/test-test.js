@@ -1,15 +1,15 @@
 "use strict";
 
 var sinonTest = require("../");
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("sinon");
 var Promise = require("es6-promise").Promise;
 
 var nextTick = typeof process !== "undefined" && process.nextTick || function (fn) {
     setTimeout(fn, 0);
 };
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
 var instance = sinonTest.configureTest(sinon);
 

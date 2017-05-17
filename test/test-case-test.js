@@ -1,14 +1,13 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("sinon");
 var sinonTestCase = require("../lib/test_case");
 
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
 var testCaseInstance;
-
 
 module.exports = {
     beforeEach: function () {
@@ -26,23 +25,6 @@ module.exports = {
             testCaseInstance(function () {});
         }, "TypeError");
     },
-
-    /*
-    "only wraps functions with test prefix": testInstance(function () {
-        this.spy(sinon, "test");
-
-        var testc = {
-            testA: function () {},
-            doB: function () {}
-        };
-
-        testCaseInstance(testc);
-
-        assert.isFunction(testc.doB);
-        assert(sinon.test.calledWith(testc.testA));
-        assert.isFalse(sinon.test.calledWith(testc.doB));
-    }),
-    */
 
     "removes setUp method": function () {
         var test = { setUp: function () {} };

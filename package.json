@@ -28,7 +28,6 @@
   },
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "buster": "0.7.18",
     "es6-promise": "^4.0.5",
     "eslint": "^3.7.1",
     "eslint-config-defaults": "^9.0.0",
@@ -38,6 +37,7 @@
     "nyc": "^10.1.2",
     "phantomjs-prebuilt": "^2.1.7",
     "pre-commit": "^1.1.2",
+    "referee": "^1.2.0",
     "rollup": "^0.41.4",
     "rollup-plugin-commonjs": "^8.0.2",
     "sinon": "^2.0.0-pre",

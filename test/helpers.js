@@ -1,15 +1,15 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 
-buster.referee.add("spy", {
+referee.add("spy", {
     assert: function (obj) {
         return obj !== null && typeof obj.calledWith === "function" && !obj.returns;
     },
     assertMessage: "Expected object ${0} to be a spy function"
 });
 
-buster.referee.add("stub", {
+referee.add("stub", {
     assert: function (obj) {
         return obj !== null &&
             typeof obj.calledWith === "function" &&
@@ -18,7 +18,7 @@ buster.referee.add("stub", {
     assertMessage: "Expected object ${0} to be a stub function"
 });
 
-buster.referee.add("mock", {
+referee.add("mock", {
     assert: function (obj) {
         return obj !== null &&
             typeof obj.verify === "function" &&
@@ -27,7 +27,7 @@ buster.referee.add("mock", {
     assertMessage: "Expected object ${0} to be a mock"
 });
 
-buster.referee.add("fakeServer", {
+referee.add("fakeServer", {
     assert: function (obj) {
         return obj !== null &&
             Object.prototype.toString.call(obj.requests) === "[object Array]" &&
@@ -36,7 +36,7 @@ buster.referee.add("fakeServer", {
     assertMessage: "Expected object ${0} to be a fake server"
 });
 
-buster.referee.add("clock", {
+referee.add("clock", {
     assert: function (obj) {
         return obj !== null &&
             typeof obj.tick === "function" &&

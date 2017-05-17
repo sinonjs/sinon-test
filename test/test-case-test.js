@@ -27,23 +27,6 @@ module.exports = {
         }, "TypeError");
     },
 
-    /*
-    "only wraps functions with test prefix": testInstance(function () {
-        this.spy(sinon, "test");
-
-        var testc = {
-            testA: function () {},
-            doB: function () {}
-        };
-
-        testCaseInstance(testc);
-
-        assert.isFunction(testc.doB);
-        assert(sinon.test.calledWith(testc.testA));
-        assert.isFalse(sinon.test.calledWith(testc.doB));
-    }),
-    */
-
     "removes setUp method": function () {
         var test = { setUp: function () {} };
         var result = testCaseInstance(test);

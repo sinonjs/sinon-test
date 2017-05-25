@@ -63,9 +63,18 @@ version can be found in the NPM package under `dist/sinon-test.js`.
 
 ## Usage
 
-See the [sinon documentation](http://sinonjs.org/docs/#sinon-test) for documentation on usage.
+Once initialized, the package creates a context for your test based on a sinon sandbox.
+You can use `this` in a wrapped test function to create sinon spies, stubs, etc.
+After your test completes, the sandbox restores anything modified to its original value.
 
-`sinon-test` instances need to be configured with a `sinon` instance (version 2+) before they can be used; you can emulate the sinon 1.x methods with the following:
+If your test function takes any arguments, pass then to the `test` wrapper
+after the test function. If the last argument is a function, it is assumed to be a callback
+for an asynchronous test. The test function may also return a promise.
+
+See the [sinon documentation](http://sinonjs.org/) for more documentation on sandboxes.
+
+`sinon-test` instances need to be configured with a `sinon` instance (version 2+) 
+before they can be used.
 
 ```js
 var sinon = require('sinon');

@@ -45,8 +45,5 @@
   },
   "peerDependencies": {
     "sinon": "^2.0.0-pre"
-  },
-  "browserify-shim": {
-    "buster": "global:buster"
   }
 }

@@ -44,6 +44,6 @@
     "uglify-js": "^3.0.7"
   },
   "peerDependencies": {
-    "sinon": "^2.0.0-pre"
+    "sinon": "^2.0.0"
   }
 }

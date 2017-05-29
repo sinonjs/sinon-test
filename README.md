@@ -96,6 +96,14 @@ describe('my function', function() {
 });
 
 ```
+
+### Test cases
+If you need the behavior of sinon.test for more than one test method in a test case, you can use sinon.testCase, which behaves exactly like wrapping each test in sinon.test with one exception: setUp and tearDown can share fakes.
+```js
+var obj = sinon.testCase({});
+```
+
+### Configuration
 In order to configure with options, a configuration hash can be passed as a 2nd argument to `sinonTest.configureTest`:
 
 ```js

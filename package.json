@@ -44,9 +44,6 @@
     "uglify-js": "^3.0.7"
   },
   "peerDependencies": {
-    "sinon": "^2.0.0-pre"
-  },
-  "browserify-shim": {
-    "buster": "global:buster"
+    "sinon": "^2.0.0"
   }
 }

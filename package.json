@@ -40,7 +40,7 @@
     "referee": "^1.2.0",
     "rollup": "^0.41.4",
     "rollup-plugin-commonjs": "^8.0.2",
-    "sinon": "^2.0.0-pre",
+    "sinon": "2.x.x",
     "uglify-js": "^3.0.7"
   },
   "peerDependencies": {

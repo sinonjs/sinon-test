@@ -10,7 +10,6 @@
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
     "lint": "eslint .",
-    "eslint-pre-commit": "./scripts/eslint-pre-commit",
     "prepublish": "run-p test lint build"
   },
   "greenkeeper": {
@@ -19,7 +18,7 @@
     ]
   },
   "pre-commit": [
-    "eslint-pre-commit"
+    "lint"
   ],
   "author": "Christian Johansen",
   "repository": {

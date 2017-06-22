@@ -11,7 +11,7 @@ var nextTick = typeof process !== "undefined" && process.nextTick || function (f
 var assert = referee.assert;
 var refute = referee.refute;
 
-var instance = sinonTest.configureTest(sinon);
+var instance = sinonTest(sinon);
 
 // promise-like structure
 function stubPromise() {

@@ -73,7 +73,7 @@ for an asynchronous test. The test function may also return a promise.
 
 See the [sinon documentation](http://sinonjs.org/) for more documentation on sandboxes.
 
-`sinon-test` instances need to be configured with a `sinon` instance (version 2+) 
+`sinon-test` instances need to be configured with a `sinon` instance (version 2+)
 before they can be used.
 
 ```js
@@ -81,8 +81,7 @@ var sinon = require('sinon');
 var sinonTest = require('sinon-test');
 var assert = require('assert');
 
-sinon.test = sinonTest.configureTest(sinon);
-sinon.testCase = sinonTest.configureTestCase(sinon);
+sinon.test = sinonTest(sinon);
 
 describe('my function', function() {
     var myFunc = require('./my-func');
@@ -96,9 +95,9 @@ describe('my function', function() {
 });
 
 ```
-In order to configure with options, a configuration hash can be passed as a 2nd argument to `sinonTest.configureTest`:
+In order to configure with options, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
-sinon.test = sinonTest.configureTest(sinon, {useFakeTimers: false});
+sinon.test = sinonTest(sinon, {useFakeTimers: false});
 ```
 

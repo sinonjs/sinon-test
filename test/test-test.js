@@ -294,7 +294,7 @@ module.exports = {
                 }
             };
             var addOneInnerSpy = this.spy();
-            this.stub(globalObj, "addOneInner", addOneInnerSpy);
+            this.stub(globalObj, "addOneInner").callsFake(addOneInnerSpy);
 
             nextTick(function () {
                 globalObj.addOne(41);

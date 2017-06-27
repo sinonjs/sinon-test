@@ -10,7 +10,6 @@
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
     "lint": "eslint .",
-    "eslint-pre-commit": "./scripts/eslint-pre-commit",
     "prepublish": "run-p test lint build"
   },
   "greenkeeper": {
@@ -19,7 +18,7 @@
     ]
   },
   "pre-commit": [
-    "eslint-pre-commit"
+    "lint"
   ],
   "author": "Christian Johansen",
   "repository": {
@@ -40,7 +39,7 @@
     "referee": "^1.2.0",
     "rollup": "^0.41.4",
     "rollup-plugin-commonjs": "^8.0.2",
-    "sinon": "^2.0.0-pre",
+    "sinon": "2.x.x",
     "uglify-js": "^3.0.7"
   },
   "peerDependencies": {

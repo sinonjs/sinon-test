@@ -560,7 +560,7 @@ module.exports = {
             properties: ["stub", "mock"]
         };
 
-        var testInstance = sinonTest.configureTest(sinon, config);
+        var testInstance = sinonTest(sinon, config);
 
         testInstance(function (obj, stub, mock) {
             mock(object).expects("method").once();
@@ -590,7 +590,7 @@ module.exports = {
                 properties: ["stub", "mock"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(function (stub, mock) {
                 stubbed = stub(obj, "meth");
@@ -612,7 +612,7 @@ module.exports = {
                 properties: ["spy", "stub", "mock"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(function (spy, stub, mock) {
                 spied = spy(obj, "meth");
@@ -638,7 +638,7 @@ module.exports = {
                 useFakeServer: false
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(function (stub, mock) {
                 stubbed = stub(obj, "meth");
@@ -661,7 +661,7 @@ module.exports = {
                     properties: ["server", "stub", "mock"]
                 };
 
-                var testInstance = sinonTest.configureTest(sinon, config);
+                var testInstance = sinonTest(sinon, config);
 
                 testInstance(function (serv, stub, mock) {
                     server = serv;
@@ -685,7 +685,7 @@ module.exports = {
                     useFakeServer: sinon.fakeServerWithClock
                 };
 
-                var testInstance = sinonTest.configureTest(sinon, config);
+                var testInstance = sinonTest(sinon, config);
 
                 testInstance(function (serv) {
                     server = serv;
@@ -704,7 +704,7 @@ module.exports = {
                     properties: ["server", "clock", "spy", "stub", "mock", "requests"]
                 };
 
-                var testInstance = sinonTest.configureTest(sinon, config);
+                var testInstance = sinonTest(sinon, config);
 
                 function testFunction() {
                     assert.equals(arguments.length, 0);
@@ -731,7 +731,7 @@ module.exports = {
                     useFakeServer: true
                 };
 
-                var testInstance = sinonTest.configureTest(sinon, config);
+                var testInstance = sinonTest(sinon, config);
 
                 function testFunction() {
                     assert.equals(arguments.length, 0);
@@ -756,7 +756,7 @@ module.exports = {
                 properties: ["clock"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(function (c) {
                 clock = c;
@@ -775,7 +775,7 @@ module.exports = {
                 useFakeTimers: ["Date", "setTimeout", "setImmediate"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(function (c) {
                 props = {
@@ -807,7 +807,7 @@ module.exports = {
                 properties: ["clock"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             function testFunction() {
                 assert.same(this, testCase);
@@ -844,7 +844,7 @@ module.exports = {
                 properties: ["sandbox", "spy"]
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
 
             testInstance(testFunction).call({});
         },
@@ -868,7 +868,7 @@ module.exports = {
                 useFakeTimers: true
             };
 
-            var testInstance = sinonTest.configureTest(sinon, config);
+            var testInstance = sinonTest(sinon, config);
             var called;
 
             var testCase = {

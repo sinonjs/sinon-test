@@ -29,7 +29,7 @@ it('should do something', ()=>{
 You could write just this
 
 ```javascript
-it('should do something', sinon.test(function(){
+it('should do something', sinonTest(function(){
     var spy1 = this.spy(myFunc);
     var spy2 = this.spy(myOtherFunc);
     myFunc(1);
@@ -47,7 +47,7 @@ Do notice that
 we use a `function` and not a arrow function (ES2015)
 when wrapping the test with `sinon.test` as it needs
 to be able to access the `this` pointer used inside
-of the function.
+of the function, which using an arrow function would prevent.
 
 See the [Usage](#usage) section for more details.
 
@@ -71,33 +71,44 @@ If your test function takes any arguments, pass then to the `test` wrapper
 after the test function. If the last argument is a function, it is assumed to be a callback
 for an asynchronous test. The test function may also return a promise.
 
-See the [sinon documentation](http://sinonjs.org/) for more documentation on sandboxes.
+See the [sinon documentation](http://sinonjs.org/releases/v2.3.5/sandbox/) for more documentation on sandboxes.
 
 `sinon-test` instances need to be configured with a `sinon` instance (version 2+)
 before they can be used.
 
 ```js
 var sinon = require('sinon');
-var sinonTest = require('sinon-test');
+var sinonTestFactory = require('sinon-test');
+var sinonTest = sinonTestFactory(sinon);
 var assert = require('assert');
-
-sinon.test = sinonTest(sinon);
 
 describe('my function', function() {
     var myFunc = require('./my-func');
 
-    it('should do something', sinon.test(function(){
+    it('should do something', sinonTest(function(){
         var spy = this.spy(myFunc);
         myFunc(1);
         assert(spy.calledWith(1));
     })); //auto-cleanup
 
 });
-
 ```
-In order to configure with options, a configuration hash can be passed as a 2nd argument to `sinonTest`:
+
+
+## API
+```javascript
+cons sinonTest = require('sinon-test')(sinon);
+```
+
+In order to [configure the sandbox](http://sinonjs.org/releases/v2.3.5/sandbox/) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
-sinon.test = sinonTest(sinon, {useFakeTimers: false});
+const sinonTest = require('sinon-test')(sinon, {useFakeTimers: false});
 ```
 
+### Backwards compatibility
+Sinon 1.x used to ship with this functionality built-in, exposed as `sinon.test()`. You can keep all your existing test code by configuring an instance of `sinon-test`, as done above, and then assigning it to `sinon` like this in your tests:
+
+```javascript
+sinon.test = sinonTest;
+```

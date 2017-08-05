@@ -1,3 +1,5 @@
+_Please note: not yet compatible with sinon v3_
+
 # Sinon Test
 > Automatic sandbox setup and teardown for SinonJS
 

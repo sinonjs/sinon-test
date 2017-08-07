@@ -772,7 +772,9 @@ module.exports = {
             var config = {
                 injectIntoThis: false,
                 properties: ["clock"],
-                useFakeTimers: ["Date", "setTimeout", "setImmediate"]
+                useFakeTimers: {
+                    toFake: ["Date", "setTimeout", "setImmediate"]
+                }
             };
 
             var testInstance = sinonTest(sinon, config);

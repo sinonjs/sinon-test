@@ -651,6 +651,28 @@ module.exports = {
             assert.mock(mocked);
         },
 
+        "backwards compatibility": {
+            "uses the new factory methods introduced in 3.1 - if available": function () {
+                var fakeSinon = { createSandbox: sinon.stub() };
+                var testInstance = sinonTest(fakeSinon);
+
+                try { testInstance(function () {})(); }
+                catch (err) { /* ignore */ }
+
+                assert(fakeSinon.createSandbox.called);
+            },
+
+            "falls back to the old 1.x-2.x methods when needed ": function () {
+                var fakeSinon = { sandbox: { create: sinon.stub() } };
+                var testInstance = sinonTest(fakeSinon);
+
+                try { testInstance(function () {})(); }
+                catch (err) { /* ignore */ }
+
+                assert(fakeSinon.sandbox.create.called);
+            }
+        },
+
         "browser options": {
             "yields server when faking xhr": function () {
                 var stubbed, mocked, server;
@@ -772,7 +794,9 @@ module.exports = {
             var config = {
                 injectIntoThis: false,
                 properties: ["clock"],
-                useFakeTimers: ["Date", "setTimeout", "setImmediate"]
+                useFakeTimers: {
+                    toFake: ["Date", "setTimeout", "setImmediate"]
+                }
             };
 
             var testInstance = sinonTest(sinon, config);

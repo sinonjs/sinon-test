@@ -97,7 +97,7 @@ describe('my function', function() {
 
 ## API
 ```javascript
-cons sinonTest = require('sinon-test')(sinon);
+const sinonTest = require('sinon-test')(sinon);
 ```
 
 In order to [configure the sandbox](http://sinonjs.org/releases/v2.3.5/sandbox/) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:

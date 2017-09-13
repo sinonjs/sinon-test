@@ -323,7 +323,8 @@ module.exports = {
             return thenable;
         });
 
-        assert.exception(test, {
+        function callback() {}
+        assert.exception(function() { test(callback) }, {
             message: /callback .* promise.* both/
         });
     },

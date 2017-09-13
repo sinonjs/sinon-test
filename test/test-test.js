@@ -324,7 +324,7 @@ module.exports = {
         });
 
         function callback() {}
-        assert.exception(function() { test(callback) }, {
+        assert.exception(function () { test(callback); }, {
             message: /callback .* promise.* both/
         });
     },

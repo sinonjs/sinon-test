@@ -314,7 +314,7 @@ module.exports = {
         }).call({}, "arg1", {}, done);
     },
 
-    "async tests should not allow thenables to be returned": function () {
+    "async tests should not allow thenables to be returned with a callback function": function () {
         var thenable = {
             then: function () {
             }

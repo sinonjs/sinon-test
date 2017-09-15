@@ -314,6 +314,15 @@ module.exports = {
         }).call({}, "arg1", {}, done);
     },
 
+    "async tests should allow thenables to be returned without a callback function": function () {
+        var test = instance(function (_) { // eslint-disable-line no-unused-vars
+            return Promise.resolve(true);
+        });
+
+        var dummy = 'this is not a callback function';
+        test(dummy)
+    },
+
     "async tests should not allow thenables to be returned with a callback function": function () {
         var thenable = {
             then: function () {

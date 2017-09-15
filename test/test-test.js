@@ -319,8 +319,8 @@ module.exports = {
             return Promise.resolve(true);
         });
 
-        var dummy = 'this is not a callback function';
-        test(dummy)
+        var dummy = "this is not a callback function";
+        refute.exception(function () { test(dummy); });
     },
 
     "async tests should not allow thenables to be returned with a callback function": function () {

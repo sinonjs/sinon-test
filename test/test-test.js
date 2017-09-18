@@ -314,7 +314,16 @@ module.exports = {
         }).call({}, "arg1", {}, done);
     },
 
-    "async tests should not allow thenables to be returned": function () {
+    "async tests should allow thenables to be returned without a callback function": function () {
+        var test = instance(function (_) { // eslint-disable-line no-unused-vars
+            return Promise.resolve(true);
+        });
+
+        var dummy = "this is not a callback function";
+        refute.exception(function () { test(dummy); });
+    },
+
+    "async tests should not allow thenables to be returned with a callback function": function () {
         var thenable = {
             then: function () {
             }
@@ -323,7 +332,8 @@ module.exports = {
             return thenable;
         });
 
-        assert.exception(test, {
+        function callback() {}
+        assert.exception(function () { test(callback); }, {
             message: /callback .* promise.* both/
         });
     },

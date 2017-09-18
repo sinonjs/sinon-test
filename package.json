@@ -10,7 +10,8 @@
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
     "lint": "eslint .",
-    "prepublish": "run-p test lint build"
+    "prepublish": "run-p test lint build",
+    "preversion": "./scripts/preversion.sh"
   },
   "greenkeeper": {
     "ignore": [

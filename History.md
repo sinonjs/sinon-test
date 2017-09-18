@@ -1,3 +1,17 @@
+2.1.1 / 2017-09-18
+==================
+Fix problems with async tests and promises (#75)
+
+2.1.0 / 2017-08-07
+==================
+Fix compatibility with Sinon 3 (#77)
+
+
+2.0.0 / 2017-06-22
+==================
+
+  * Simplify configuration API (#74)
+
 1.0.0 / 2017-01-02
 ==================
 

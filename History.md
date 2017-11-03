@@ -1,3 +1,10 @@
+
+2.1.2 / 2017-11-03
+==================
+
+  * Adds a new RELEASE doc to avoid embarassing mistakes
+  * Run tests against Sinon 4
+
 2.1.1 / 2017-09-18
 ==================
 Fix problems with async tests and promises (#75)

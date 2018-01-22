@@ -29,7 +29,7 @@
   "license": "BSD-3-Clause",
   "devDependencies": {
     "es6-promise": "4.0.5",
-    "eslint": "3.7.1",
+    "eslint": "4.16.0",
     "eslint-config-defaults": "9.0.0",
     "mkdirp": "0.5.1",
     "mocha": "3.4.1",

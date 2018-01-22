@@ -529,7 +529,7 @@ module.exports = {
 
         assert.same(exception.name, "ExpectationError");
         assert.equals(exception.message,
-                      "Unexpected call: method(42)\n" +
+            "Unexpected call: method(42)\n" +
                       "    Expected method(1) once (never called)");
         assert.same(object.method, method);
     },

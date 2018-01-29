@@ -26,6 +26,10 @@
     "type": "git",
     "url": "http://github.com/sinonjs/sinon-test.git"
   },
+  "files": [
+    "dist/",
+    "lib/"
+  ],
   "license": "BSD-3-Clause",
   "devDependencies": {
     "es6-promise": "4.0.5",

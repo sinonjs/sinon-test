@@ -1,4 +1,9 @@
 
+2.1.3 / 2018-01-29
+==================
+
+  * Add files section to package.json to prevent unnecesary bloat of package (#87)
+
 2.1.2 / 2017-11-03
 ==================
 

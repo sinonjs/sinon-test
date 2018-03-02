@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "run-s build:dist-folder build:bundle",
-    "build:bundle": "rollup -c | uglifyjs --mangle --compress if_return,dead_code,unsafe,unsafe_comps,join_vars,comparisons,loops,collapse_vars,pure_getters > dist/sinon-test.js",
+    "build:bundle": "rollup -c > dist/sinon-test.js",
     "build:dist-folder": "mkdirp dist",
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
@@ -45,8 +45,7 @@
     "referee": "1.2.0",
     "rollup": "0.41.4",
     "rollup-plugin-commonjs": "8.0.2",
-    "sinon": "4.x.x",
-    "uglify-js": "3.0.7"
+    "sinon": "4.x.x"
   },
   "peerDependencies": {
     "sinon": "2.x - 4.x"

@@ -1,7 +1,7 @@
 "use strict";
 
 var sinonTest = require("../");
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var sinon = require("sinon");
 var Promise = require("es6-promise").Promise;
 

@@ -189,6 +189,21 @@ module.exports = {
         });
     },
 
+    "returns the test's promise even if the test function has parameters (e.g. assert in QUnit)": function () {
+        var method = function () {
+        };
+        var object = {method: method};
+
+        var promise = instance(function (QUnitAssert) { // eslint-disable-line no-unused-vars
+            this.stub(object, "method");
+            return Promise.resolve().then(function () {
+                object.method();
+            });
+        }).call({});
+
+        assert.defined(promise);
+    },
+
     "restores stub when method throws": function () {
         var method = function () {};
         var object = { method: method };

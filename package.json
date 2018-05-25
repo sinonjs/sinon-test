@@ -48,6 +48,6 @@
     "sinon": "^4.x.x"
   },
   "peerDependencies": {
-    "sinon": "2.x - 4.x"
+    "sinon": "2.x - 5.x"
   }
 }

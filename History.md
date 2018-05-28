@@ -1,4 +1,9 @@
 
+2.2.0 / 2018-05-28
+==================
+
+  * Fix promises not passed to unit test framework if test function has parameters Issue 90
+
 2.1.4 / 2018-05-25
 ==================
 

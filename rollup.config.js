@@ -3,9 +3,11 @@
 var commonjs = require("rollup-plugin-commonjs");
 
 module.exports = {
-    entry: "lib/index.js",
-    format: "umd",
-    moduleName: "sinonTest",
+    input: "lib/index.js",
+    output: {
+        name: "sinonTest",
+        format: "umd"
+    },
     plugins: [
         commonjs({sourceMap: false})
     ]

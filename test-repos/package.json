@@ -1,0 +1,14 @@
+{
+  "name": "test-integration",
+  "version": "1.0.0",
+  "description": "Tests the integration using other consumers",
+  "dependencies": {
+    "esm": "^3.0.82",
+    "sinon-test": "^2.2.1"
+  },
+  "scripts": {
+    "test": "node -r esm test.mjs && node test.js && node -r esm test-bundle.mjs && node test-bundle.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

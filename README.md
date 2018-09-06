@@ -29,7 +29,7 @@ it('should do something', ()=>{
 You could write just this
 
 ```javascript
-it('should do something', sinonTest(function(){
+it('should do something', test(function(){
     var spy1 = this.spy(myFunc);
     var spy2 = this.spy(myOtherFunc);
     myFunc(1);
@@ -57,11 +57,9 @@ via [npm (node package manager)](https://github.com/npm/npm)
 
     $ npm install sinon-test
 
-or just add it as a `<script src="dist/sinon-test.js"></script>`
-tag to the html where you write your tests. A pre-built browser
-version can be found in the NPM package under `dist/sinon-test.js`.
-
 ## Usage
+
+### Node and CommonJS build systems
 
 Once initialized, the package creates a context for your test based on a sinon sandbox.
 You can use `this` in a wrapped test function to create sinon spies, stubs, etc.
@@ -78,14 +76,14 @@ before they can be used.
 
 ```js
 var sinon = require('sinon');
-var sinonTestFactory = require('sinon-test');
-var sinonTest = sinonTestFactory(sinon);
+var sinonTest = require('sinon-test');
+var test = sinonTest(sinon);
 var assert = require('assert');
 
 describe('my function', function() {
     var myFunc = require('./my-func');
 
-    it('should do something', sinonTest(function(){
+    it('should do something', test(function(){
         var spy = this.spy(myFunc);
         myFunc(1);
         assert(spy.calledWith(1));
@@ -94,21 +92,45 @@ describe('my function', function() {
 });
 ```
 
+### Direct browser usage
+
+In place of the `require` statements indicated above, in the
+browser, you should simply reference the global `sinonTest` after
+including a script tag in your HTML:
+
+```html
+<script src="dist/sinon-test.js"></script>
+```
+
+Or if you are in an ES6 Modules environment (modern browsers only), you
+only need to add an import statement:
+
+```html
+<script type="module">
+import sinon from './node_modules/sinon/pkg/sinon-esm.js';
+import sinonTest from './node_modules/sinon-test/dist/sinon-test-es.js';
+const test = sinonTest(sinon);
+
+it('should work', test(function() {
+    pass();
+}));
+</script>
+```
 
 ## API
 ```javascript
-const sinonTest = require('sinon-test')(sinon);
+const test = require('sinon-test')(sinon);
 ```
 
 In order to [configure the sandbox](http://sinonjs.org/releases/v2.3.5/sandbox/) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
-const sinonTest = require('sinon-test')(sinon, {useFakeTimers: false});
+const test = require('sinon-test')(sinon, {useFakeTimers: false});
 ```
 
 ### Backwards compatibility
 Sinon 1.x used to ship with this functionality built-in, exposed as `sinon.test()`. You can keep all your existing test code by configuring an instance of `sinon-test`, as done above, and then assigning it to `sinon` like this in your tests:
 
 ```javascript
-sinon.test = sinonTest;
+sinon.test = test;
 ```

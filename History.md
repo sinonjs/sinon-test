@@ -1,4 +1,10 @@
 
+2.3.0 / 2018-09-06
+==================
+
+  * ES6 module export (#93)
+  * Add `browser` and `module` properties for bundling discoverability
+
 2.2.1 / 2018-07-24
 ==================
 

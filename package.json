@@ -11,9 +11,11 @@
     "build:dist-folder": "mkdirp dist",
     "coverage": "nyc report --reporter text-lcov | coveralls",
     "test": "nyc mocha",
+    "//integration-test": "This cannot run as a prepare step, as it will trigger a loop",
+    "integration-test": "test-repos/do-test.sh",
     "lint": "eslint .",
     "prepare": "run-p test lint build",
-    "preversion": "./scripts/preversion.sh"
+    "preversion": "test-repos/do-test.sh && ./scripts/preversion.sh"
   },
   "greenkeeper": {
     "ignore": [

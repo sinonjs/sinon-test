@@ -16,6 +16,7 @@ before_install:
 
 after_success:
   - npm run coverage
+  - npm run integration-test
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources

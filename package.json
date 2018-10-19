@@ -52,6 +52,6 @@
     "sinon": "^6.1.5"
   },
   "peerDependencies": {
-    "sinon": "2.x - 6.x"
+    "sinon": "2.x - 7.x"
   }
 }

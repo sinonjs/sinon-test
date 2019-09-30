@@ -12,9 +12,7 @@ cat esm-bundle-pre.mjs test-body.js > test-bundle.mjs
 cat umd-bundle-pre.js test-body.js > test-bundle.js
 
 cd ..
-npm link # create a global symlink to the local sinon-test project
 cd "$SCRIPT_DIR"
 
 npm install
-npm link sinon-test # use local version
 npm test

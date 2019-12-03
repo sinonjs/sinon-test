@@ -1,4 +1,9 @@
 
+2.4.1 / 2019-12-03
+==================
+
+  * Reintroduce injectIntoThis in local config (#135) making it work with Sinon 7.3+
+
 2.4.0 / 2018-10-19
 ==================
 

@@ -52,7 +52,7 @@
     "prettier": "^1.18.2",
     "rollup": "^1.23.1",
     "rollup-plugin-commonjs": "^10.1.0",
-    "sinon": "^7.0.0"
+    "sinon": "^7.5.0"
   },
   "peerDependencies": {
     "sinon": "2.x - 7.x"

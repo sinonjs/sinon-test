@@ -43,8 +43,7 @@ Sinon will take care of removing all the spies and stubs
 from the wrapped functions for you. It does this by using
 `sinon.sandbox` internally.
 
-Do notice that
-we use a `function` and not a arrow function (ES2015)
+Do notice that we use a `function` and not a arrow function (ES2015)
 when wrapping the test with `sinon.test` as it needs
 to be able to access the `this` pointer used inside
 of the function, which using an arrow function would prevent.
@@ -122,11 +121,13 @@ it('should work', test(function() {
 const test = require('sinon-test')(sinon);
 ```
 
-In order to [configure the sandbox](http://sinonjs.org/releases/v2.3.5/sandbox/) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
+In order to [configure the sandbox](http://sinonjs.org/releases/latest/sandbox#var-sandbox--sinoncreatesandboxconfig) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
 const test = require('sinon-test')(sinon, {useFakeTimers: false});
 ```
+
+The only difference to the standard configuration object for Sinon's sandbox is the addition of the `injectIntoThis` property, which is used to inject the sandbox' props into the context object (`this`).
 
 ### Backwards compatibility
 Sinon 1.x used to ship with this functionality built-in, exposed as `sinon.test()`. You can keep all your existing test code by configuring an instance of `sinon-test`, as done above, and then assigning it to `sinon` like this in your tests:

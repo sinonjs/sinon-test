@@ -367,7 +367,7 @@ module.exports = {
         var dummy = "this is not a callback function";
         refute.exception(function() {
             test(dummy);
-        });
+        }, "hei");
     },
 
     "async tests should not allow thenables to be returned with a callback function": function() {
@@ -833,12 +833,12 @@ module.exports = {
 
                 function testFunction() {
                     assert.equals(arguments.length, 0);
-                    refute.defined(this.server);
-                    refute.defined(this.clock);
-                    refute.defined(this.spy);
-                    refute.defined(this.stub);
-                    refute.defined(this.mock);
-                    refute.defined(this.requests);
+                    assert.isUndefined(this.server);
+                    assert.isUndefined(this.clock);
+                    assert.isUndefined(this.spy);
+                    assert.isUndefined(this.stub);
+                    assert.isUndefined(this.mock);
+                    assert.isUndefined(this.requests);
                     assert.fakeServer(obj.server);
                     assert.clock(obj.clock);
                     assert.isFunction(obj.spy);
@@ -866,7 +866,7 @@ module.exports = {
                     assert.fakeServer(this.server);
                     assert.isArray(this.requests);
                     assert.clock(this.clock);
-                    refute.defined(this.sandbox);
+                    assert.isUndefined(this.sandbox);
                 }
 
                 testInstance(testFunction).call({});
@@ -946,9 +946,9 @@ module.exports = {
                 assert.same(this, testCase);
                 assert.equals(arguments.length, 0);
                 assert.clock(this.clock);
-                refute.defined(this.spy);
-                refute.defined(this.stub);
-                refute.defined(this.mock);
+                assert.isUndefined(this.spy);
+                assert.isUndefined(this.stub);
+                assert.isUndefined(this.mock);
             }
 
             testInstance(testFunction).call(testCase);
@@ -988,13 +988,13 @@ module.exports = {
             // eslint-disable-next-line no-empty-function
             instance(function() {}).call(testCase);
 
-            refute.defined(testCase.spy);
-            refute.defined(testCase.stub);
-            refute.defined(testCase.mock);
-            refute.defined(testCase.sandbox);
-            refute.defined(testCase.clock);
-            refute.defined(testCase.server);
-            refute.defined(testCase.requests);
+            assert.isUndefined(testCase.spy);
+            assert.isUndefined(testCase.stub);
+            assert.isUndefined(testCase.mock);
+            assert.isUndefined(testCase.sandbox);
+            assert.isUndefined(testCase.clock);
+            assert.isUndefined(testCase.server);
+            assert.isUndefined(testCase.requests);
         },
 
         "uses test to fake time": function() {

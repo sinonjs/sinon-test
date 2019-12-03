@@ -8,7 +8,8 @@ referee.add("spy", {
             obj !== null && typeof obj.calledWith === "function" && !obj.returns
         );
     },
-    assertMessage: "Expected object ${0} to be a spy function"
+    assertMessage: "Expected object ${0} to be a spy function",
+    refuteMessage: "Expected object ${0} not to be a spy function"
 });
 
 referee.add("stub", {
@@ -19,7 +20,8 @@ referee.add("stub", {
             typeof obj.returns === "function"
         );
     },
-    assertMessage: "Expected object ${0} to be a stub function"
+    assertMessage: "Expected object ${0} to be a stub function",
+    refuteMessage: "Expected object ${0} not to be a stub function"
 });
 
 referee.add("mock", {
@@ -30,7 +32,8 @@ referee.add("mock", {
             typeof obj.expects === "function"
         );
     },
-    assertMessage: "Expected object ${0} to be a mock"
+    assertMessage: "Expected object ${0} to be a mock",
+    refuteMessage: "Expected object ${0} not to be a mock"
 });
 
 referee.add("fakeServer", {
@@ -41,7 +44,8 @@ referee.add("fakeServer", {
             typeof obj.respondWith === "function"
         );
     },
-    assertMessage: "Expected object ${0} to be a fake server"
+    assertMessage: "Expected object ${0} to be a fake server",
+    refuteMessage: "Expected object ${0} not to be a fake server"
 });
 
 referee.add("clock", {
@@ -52,5 +56,6 @@ referee.add("clock", {
             typeof obj.setTimeout === "function"
         );
     },
-    assertMessage: "Expected object ${0} to be a clock"
+    assertMessage: "Expected object ${0} to be a clock",
+    refuteMessage: "Expected object ${0} not to be a clock"
 });

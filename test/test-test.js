@@ -220,7 +220,7 @@ module.exports = {
             });
         }).call({});
 
-        assert.defined(promise);
+        refute.isUndefined(promise);
     },
 
     "restores stub when method throws": function() {
@@ -268,7 +268,7 @@ module.exports = {
 
     "async test with sandbox": function(done) {
         var fakeDone = function(args) {
-            assert.equals(args, undefined);
+            assert.isUndefined(args);
             done(args);
         };
 
@@ -282,7 +282,7 @@ module.exports = {
     "async test with sandbox using mocha interface": function(done) {
         var it = function(title, fn) {
             var mochaDone = function(args) {
-                assert.equals(args, undefined);
+                assert.isUndefined(args);
                 done(args);
             };
             if (fn.length) {
@@ -307,7 +307,7 @@ module.exports = {
     ) {
         var it = function(title, fn) {
             var mochaDone = function(args) {
-                assert.equals(args, undefined);
+                assert.isUndefined(args);
                 done(args);
             };
             if (fn.length) {

@@ -1,4 +1,11 @@
 
+2.4.2 / 2020-01-28
+==================
+
+  * Adjust for @sinonjs/referee@4 breaking changes
+  * Upgrade sinon peerDependency to allow 8.x
+  * Remove configureTest
+
 2.4.1 / 2019-12-03
 ==================
 

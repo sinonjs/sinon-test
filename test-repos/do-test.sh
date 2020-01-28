@@ -1,4 +1,9 @@
 #!/bin/bash
+# Verify that this version of sinon-test works with external libraries
+#
+# This script cannot run on Circle CI as a build step
+# See https://circleci.com/gh/sinonjs/sinon-test/918
+# The reason is that `npm link` is not allowed by the container
 
 set -e; # exit on errors
 

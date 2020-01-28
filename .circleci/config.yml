@@ -76,18 +76,6 @@ jobs:
           name: Upload coverage report
           command: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
 
-  integration-test:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - *attach-step
-      - run:
-          name: Build
-          command: npm run build
-      - run:
-          name: Integration test
-          command: npm run integration-test
-
 workflows:
   version: 2
   sinon-test:
@@ -105,10 +93,3 @@ workflows:
       - node-12:
           requires:
             - install-dependencies
-      - integration-test:
-          requires:
-            - install-dependencies
-            - lint
-            - node-8
-            - node-10
-            - node-12

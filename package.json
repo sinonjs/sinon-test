@@ -15,7 +15,7 @@
     "integration-test": "test-repos/do-test.sh",
     "lint": "eslint .",
     "prepare": "run-p test lint build",
-    "preversion": "test-repos/do-test.sh && ./scripts/preversion.sh"
+    "preversion": "npm run integration-test && ./scripts/preversion.sh"
   },
   "greenkeeper": {
     "ignore": [

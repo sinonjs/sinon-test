@@ -40,7 +40,7 @@
     "es6-promise": "^4.2.4",
     "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.3.0",
-    "eslint-config-sinon": "^3.0.1",
+    "eslint-config-sinon": "^4.0.0",
     "eslint-plugin-ie11": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.1",
     "mkdirp": "^1.0.3",

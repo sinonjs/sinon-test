@@ -50,7 +50,7 @@
     "phantomjs-prebuilt": "^2.1.16",
     "pre-commit": "^1.2.2",
     "prettier": "^1.18.2",
-    "rollup": "^1.23.1",
+    "rollup": "^2.3.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "sinon": "^9.0.0"
   },

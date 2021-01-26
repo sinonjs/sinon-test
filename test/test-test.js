@@ -317,6 +317,7 @@ module.exports = {
             }
         };
 
+        // eslint-disable-next-line mocha/no-identical-title
         it(
             "works",
             instance(function(callback) {

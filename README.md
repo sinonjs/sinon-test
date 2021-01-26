@@ -5,6 +5,7 @@
 > Automatic sandbox setup and teardown for SinonJS
 
 ## Why?
+
 Instead of writing tedious setup and teardown code for each
 individual test case you can let Sinon do all the cleanup for you.
 
@@ -14,12 +15,12 @@ So instead of doing this (using [Mocha](https://mochajs.org/) syntax):
 var spy1;
 var spy2;
 
-afterEach(()=>{
+afterEach(() => {
     spy1.restore();
     spy2.restore();
 });
 
-it('should do something', ()=>{
+it("should do something", () => {
     spy1 = sinon.spy(myFunc);
     spy2 = sinon.spy(myOtherFunc);
     myFunc(1);
@@ -32,14 +33,17 @@ it('should do something', ()=>{
 You could write just this
 
 ```javascript
-it('should do something', test(function(){
-    var spy1 = this.spy(myFunc);
-    var spy2 = this.spy(myOtherFunc);
-    myFunc(1);
-    myFunc(2);
-    assert(spy1.calledWith(1));
-    assert(spy1.calledWith(2));
-})); //auto-cleanup
+it(
+    "should do something",
+    test(function() {
+        var spy1 = this.spy(myFunc);
+        var spy2 = this.spy(myOtherFunc);
+        myFunc(1);
+        myFunc(2);
+        assert(spy1.calledWith(1));
+        assert(spy1.calledWith(2));
+    })
+); //auto-cleanup
 ```
 
 Sinon will take care of removing all the spies and stubs
@@ -77,20 +81,22 @@ See the [sinon documentation](http://sinonjs.org/releases/v2.3.5/sandbox/) for m
 before they can be used.
 
 ```js
-var sinon = require('sinon');
-var sinonTest = require('sinon-test');
+var sinon = require("sinon");
+var sinonTest = require("sinon-test");
 var test = sinonTest(sinon);
-var assert = require('assert');
+var assert = require("assert");
 
-describe('my function', function() {
-    var myFunc = require('./my-func');
+describe("my function", function() {
+    var myFunc = require("./my-func");
 
-    it('should do something', test(function(){
-        var spy = this.spy(myFunc);
-        myFunc(1);
-        assert(spy.calledWith(1));
-    })); //auto-cleanup
-
+    it(
+        "should do something",
+        test(function() {
+            var spy = this.spy(myFunc);
+            myFunc(1);
+            assert(spy.calledWith(1));
+        })
+    ); //auto-cleanup
 });
 ```
 
@@ -109,30 +115,35 @@ only need to add an import statement:
 
 ```html
 <script type="module">
-import sinon from './node_modules/sinon/pkg/sinon-esm.js';
-import sinonTest from './node_modules/sinon-test/dist/sinon-test-es.js';
-const test = sinonTest(sinon);
+    import sinon from "./node_modules/sinon/pkg/sinon-esm.js";
+    import sinonTest from "./node_modules/sinon-test/dist/sinon-test-es.js";
+    const test = sinonTest(sinon);
 
-it('should work', test(function() {
-    pass();
-}));
+    it(
+        "should work",
+        test(function() {
+            pass();
+        })
+    );
 </script>
 ```
 
 ## API
+
 ```javascript
-const test = require('sinon-test')(sinon);
+const test = require("sinon-test")(sinon);
 ```
 
 In order to [configure the sandbox](http://sinonjs.org/releases/latest/sandbox#var-sandbox--sinoncreatesandboxconfig) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
-const test = require('sinon-test')(sinon, {useFakeTimers: false});
+const test = require("sinon-test")(sinon, { useFakeTimers: false });
 ```
 
 The only difference to the standard configuration object for Sinon's sandbox is the addition of the `injectIntoThis` property, which is used to inject the sandbox' props into the context object (`this`).
 
 ### Backwards compatibility
+
 Sinon 1.x used to ship with this functionality built-in, exposed as `sinon.test()`. You can keep all your existing test code by configuring an instance of `sinon-test`, as done above, and then assigning it to `sinon` like this in your tests:
 
 ```javascript

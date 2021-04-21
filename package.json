@@ -56,7 +56,7 @@
     "sinon": "^9.0.0"
   },
   "peerDependencies": {
-    "sinon": "2.x - 9.x"
+    "sinon": "2.x - 10.x"
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --check",

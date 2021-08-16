@@ -1,4 +1,16 @@
 
+3.1.1 / 2021-08-16
+==================
+
+  * Update peer dependency to Sinon 11 (fixes #185)
+  * [Security] Bump acorn from 7.1.0 to 7.1.1 (#166)
+  * Remove CircleCI config
+  * Configure CI using GitHub Actions
+  * Bump path-parse from 1.0.6 to 1.0.7
+  * Bump glob-parent from 5.1.0 to 5.1.2
+  * Bump hosted-git-info from 2.6.0 to 2.8.9
+  * Bump lodash from 4.17.19 to 4.17.21
+
 3.1.0 / 2021-04-22
 ==================
 

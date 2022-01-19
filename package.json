@@ -53,10 +53,10 @@
     "prettier": "^1.18.2",
     "rollup": "^1.23.1",
     "rollup-plugin-commonjs": "^10.1.0",
-    "sinon": "^11"
+    "sinon": "^12"
   },
   "peerDependencies": {
-    "sinon": "2.x - 11.x"
+    "sinon": "2.x - 12.x"
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --check",

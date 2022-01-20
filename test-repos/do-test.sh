@@ -6,6 +6,7 @@
 # The reason is that `npm link` is not allowed by the container
 
 set -e; # exit on errors
+set -x
 
 # make sure we can call this script from everywhere and still have relative paths working
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -32,7 +33,7 @@ link_local_sinon_test(){
 
 cleanup(){
     cd "$SCRIPT_DIR"/..
-    npm unlink
+    npm unlink sinon-test
 }
 
 run_test_with_local_version(){

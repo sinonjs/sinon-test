@@ -1,4 +1,12 @@
 
+3.1.2 / 2022-01-20
+==================
+
+  * Update lock file version for NPM >= 7
+  * Update integration test script
+  * feat: add support to sinon 12 (#187)
+  * Bump semver-regex from 3.1.2 to 3.1.3
+
 3.1.1 / 2021-08-16
 ==================
 

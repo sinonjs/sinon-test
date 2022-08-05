@@ -1,4 +1,4 @@
-extends: eslint-config-sinon
+extends: "@sinonjs/eslint-config"
 
 plugins:
     - ie11

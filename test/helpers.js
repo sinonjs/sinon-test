@@ -3,17 +3,17 @@
 var referee = require("@sinonjs/referee");
 
 referee.add("spy", {
-    assert: function(obj) {
+    assert: function (obj) {
         return (
             obj !== null && typeof obj.calledWith === "function" && !obj.returns
         );
     },
     assertMessage: "Expected object ${0} to be a spy function",
-    refuteMessage: "Expected object ${0} not to be a spy function"
+    refuteMessage: "Expected object ${0} not to be a spy function",
 });
 
 referee.add("stub", {
-    assert: function(obj) {
+    assert: function (obj) {
         return (
             obj !== null &&
             typeof obj.calledWith === "function" &&
@@ -21,11 +21,11 @@ referee.add("stub", {
         );
     },
     assertMessage: "Expected object ${0} to be a stub function",
-    refuteMessage: "Expected object ${0} not to be a stub function"
+    refuteMessage: "Expected object ${0} not to be a stub function",
 });
 
 referee.add("mock", {
-    assert: function(obj) {
+    assert: function (obj) {
         return (
             obj !== null &&
             typeof obj.verify === "function" &&
@@ -33,11 +33,11 @@ referee.add("mock", {
         );
     },
     assertMessage: "Expected object ${0} to be a mock",
-    refuteMessage: "Expected object ${0} not to be a mock"
+    refuteMessage: "Expected object ${0} not to be a mock",
 });
 
 referee.add("fakeServer", {
-    assert: function(obj) {
+    assert: function (obj) {
         return (
             obj !== null &&
             Object.prototype.toString.call(obj.requests) === "[object Array]" &&
@@ -45,11 +45,11 @@ referee.add("fakeServer", {
         );
     },
     assertMessage: "Expected object ${0} to be a fake server",
-    refuteMessage: "Expected object ${0} not to be a fake server"
+    refuteMessage: "Expected object ${0} not to be a fake server",
 });
 
 referee.add("clock", {
-    assert: function(obj) {
+    assert: function (obj) {
         return (
             obj !== null &&
             typeof obj.tick === "function" &&
@@ -57,5 +57,5 @@ referee.add("clock", {
         );
     },
     assertMessage: "Expected object ${0} to be a clock",
-    refuteMessage: "Expected object ${0} not to be a clock"
+    refuteMessage: "Expected object ${0} not to be a clock",
 });

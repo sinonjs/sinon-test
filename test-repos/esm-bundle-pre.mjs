@@ -1,3 +1,3 @@
-import sinon from 'sinon';
-import sinonTestFactory from '../lib/index';
-import assert from 'assert';
+import sinon from "sinon";
+import sinonTestFactory from "../lib/index";
+import assert from "assert";

@@ -1,4 +1,14 @@
 
+3.1.4 / 2022-08-05
+==================
+
+  * Required upgrades (#195)
+  * Update to Sinon 14
+  * Bump ansi-regex from 3.0.0 to 3.0.1
+  * Bump shell-quote from 1.7.2 to 1.7.3
+  * Bump semver-regex from 3.1.3 to 3.1.4
+  * chore: Set permissions for GitHub actions
+
 3.1.3 / 2022-02-18
 ==================
 

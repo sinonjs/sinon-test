@@ -1,6 +1,6 @@
 "use strict";
 
-var commonjs = require("rollup-plugin-commonjs");
+const commonjs = require("rollup-plugin-commonjs");
 
 function createConfig(cfg) {
     return {

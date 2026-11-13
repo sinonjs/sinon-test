@@ -1,36 +1,36 @@
 "use strict";
 
-var sinonTest = require("../");
-var referee = require("@sinonjs/referee");
-var sinon = require("sinon");
-var Promise = require("es6-promise").Promise;
+const sinonTest = require("../");
+const referee = require("@sinonjs/referee");
+const sinon = require("sinon");
+const Promise = require("es6-promise").Promise;
 
-var nextTick =
+const nextTick =
     (typeof process !== "undefined" && process.nextTick) ||
     function (fn) {
         setTimeout(fn, 0);
     };
-var assert = referee.assert;
-var refute = referee.refute;
+const assert = referee.assert;
+const refute = referee.refute;
 
-var instance = sinonTest(sinon);
+const instance = sinonTest(sinon);
 
 // promise-like structure
 function stubPromise() {
-    var thenStub = sinon.stub();
-    var promise = {
+    const thenStub = sinon.stub();
+    const promise = {
         then: thenStub,
         index: 0,
-        resolve: function (object) {
-            var callback = thenStub.getCall(this.index++).args[0];
+        resolve(object) {
+            const callback = thenStub.getCall(this.index++).args[0];
             if (object) {
                 callback(object);
             } else {
                 callback();
             }
         },
-        reject: function (error) {
-            var callback = thenStub.getCall(this.index++).args[1];
+        reject(error) {
+            const callback = thenStub.getCall(this.index++).args[1];
             if (error) {
                 callback(error);
             } else {
@@ -45,10 +45,10 @@ function stubPromise() {
 }
 
 module.exports = {
-    beforeEach: function () {
+    beforeEach() {
         this.boundTestCase = function () {
             var properties = {
-                fn: function () {
+                fn() {
                     properties.self = this;
                     properties.args = arguments;
                     properties.spy = this.spy;
@@ -65,26 +65,24 @@ module.exports = {
         };
     },
 
-    "throws if argument is not a function": function () {
-        assert.exception(function () {
+    "throws if argument is not a function"() {
+        assert.exception(() => {
             instance({});
         });
     },
 
-    "proxies return value": function () {
-        var object = {};
+    "proxies return value"() {
+        const object = {};
 
-        var result = instance(function () {
-            return object;
-        })();
+        const result = instance(() => object)();
 
         assert.same(result, object);
     },
 
-    "stubs inside sandbox": function () {
+    "stubs inside sandbox"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
         instance(function () {
             this.stub(object, "method").returns(object);
@@ -93,10 +91,10 @@ module.exports = {
         }).call({});
     },
 
-    "restores stubs": function () {
+    "restores stubs"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
         instance(function () {
             this.stub(object, "method");
@@ -105,12 +103,12 @@ module.exports = {
         assert.same(object.method, method);
     },
 
-    "restores stubs on all object methods": function () {
+    "restores stubs on all object methods"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
+        const method = function () {};
         // eslint-disable-next-line no-empty-function
-        var method2 = function () {};
-        var object = { method: method, method2: method2 };
+        const method2 = function () {};
+        const object = { method, method2 };
 
         instance(function () {
             this.stub(object);
@@ -120,12 +118,12 @@ module.exports = {
         assert.same(object.method2, method2);
     },
 
-    "throws when method throws": function () {
+    "throws when method throws"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
-        assert.exception(function () {
+        assert.exception(() => {
             instance(function () {
                 this.stub(object, "method");
                 throw new Error();
@@ -133,14 +131,14 @@ module.exports = {
         }, "Error");
     },
 
-    "throws when an async method throws": function () {
+    "throws when an async method throws"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
         // eslint-disable-next-line no-empty-function
-        var fakeDone = function () {};
+        const fakeDone = function () {};
 
-        assert.exception(function () {
+        assert.exception(() => {
             // eslint-disable-next-line no-unused-vars
             instance(function (done) {
                 this.stub(object, "method");
@@ -149,31 +147,32 @@ module.exports = {
         }, "Error");
     },
 
-    "restores stub after promise resolves": function () {
-        var object = {};
+    "restores stub after promise resolves"() {
+        const object = {};
 
-        var promise = instance(function () {
-            return new Promise(function (resolve) {
-                nextTick(function () {
-                    resolve(object);
-                });
-            });
-        }).call({});
+        const promise = instance(
+            () =>
+                new Promise((resolve) => {
+                    nextTick(() => {
+                        resolve(object);
+                    });
+                })
+        ).call({});
 
-        return promise.then(function (result) {
+        return promise.then((result) => {
             assert.same(result, object);
         });
     },
 
-    "restores stub after promise is resolved": function () {
+    "restores stub after promise is resolved"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
-        var promise = instance(function () {
+        const promise = instance(function () {
             this.stub(object, "method");
-            return new Promise(function (resolve) {
-                nextTick(function () {
+            return new Promise((resolve) => {
+                nextTick(() => {
                     resolve(object);
                 });
             });
@@ -181,20 +180,20 @@ module.exports = {
 
         assert.equals(object.method === method, false);
 
-        return promise.then(function () {
+        return promise.then(() => {
             assert.same(object.method, method);
         });
     },
 
-    "restores stub after promise is rejected": function () {
+    "restores stub after promise is rejected"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
-        var promise = instance(function () {
+        const promise = instance(function () {
             this.stub(object, "method");
-            return new Promise(function (_, reject) {
-                nextTick(function () {
+            return new Promise((_, reject) => {
+                nextTick(() => {
                     reject(new Error());
                 });
             });
@@ -202,47 +201,46 @@ module.exports = {
 
         assert.equals(object.method === method, false);
 
-        return promise.then(null, function (err) {
+        return promise.then(null, (err) => {
             assert.equals(err instanceof Error, true);
         });
     },
 
-    "returns the test's promise even if the test function has parameters (e.g. assert in QUnit)":
-        function () {
-            // eslint-disable-next-line no-empty-function
-            var method = function () {};
-            var object = { method: method };
-
-            // eslint-disable-next-line no-unused-vars
-            var promise = instance(function (QUnitAssert) {
-                this.stub(object, "method");
-                return Promise.resolve().then(function () {
-                    object.method();
-                });
-            }).call({});
-
-            refute.isUndefined(promise);
-        },
-
-    "restores stub when method throws": function () {
+    "returns the test's promise even if the test function has parameters (e.g. assert in QUnit)"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
+
+        // eslint-disable-next-line no-unused-vars
+        const promise = instance(function (QUnitAssert) {
+            this.stub(object, "method");
+            return Promise.resolve().then(() => {
+                object.method();
+            });
+        }).call({});
+
+        refute.isUndefined(promise);
+    },
+
+    "restores stub when method throws"() {
+        // eslint-disable-next-line no-empty-function
+        const method = function () {};
+        const object = { method };
 
         try {
             instance(function () {
                 this.stub(object, "method");
                 throw new Error();
             }).call({});
-        } catch (e) {} // eslint-disable-line no-empty
+        } catch {} // eslint-disable-line no-empty
 
         assert.same(object.method, method);
     },
 
-    "mocks inside sandbox": function () {
+    "mocks inside sandbox"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
         instance(function () {
             this.mock(object).expects("method").returns(object);
@@ -251,8 +249,8 @@ module.exports = {
         }).call({});
     },
 
-    "passes on errors to callbacks": function () {
-        var fn = instance(function (callback) {
+    "passes on errors to callbacks"() {
+        const fn = instance((callback) => {
             callback(new Error("myerror"));
         });
 
@@ -265,22 +263,22 @@ module.exports = {
         assert.equals(errorChecker.called, true);
     },
 
-    "async test with sandbox": function (done) {
-        var fakeDone = function (args) {
+    "async test with sandbox"(done) {
+        const fakeDone = function (args) {
             assert.isUndefined(args);
             done(args);
         };
 
-        instance(function (callback) {
-            nextTick(function () {
+        instance((callback) => {
+            nextTick(() => {
                 callback();
             });
         }).call({}, fakeDone);
     },
 
-    "async test with sandbox using mocha interface": function (done) {
-        var it = function (title, fn) {
-            var mochaDone = function (args) {
+    "async test with sandbox using mocha interface"(done) {
+        const it = function (title, fn) {
+            const mochaDone = function (args) {
                 assert.isUndefined(args);
                 done(args);
             };
@@ -293,19 +291,17 @@ module.exports = {
 
         it(
             "works",
-            instance(function (callback) {
-                nextTick(function () {
+            instance((callback) => {
+                nextTick(() => {
                     callback();
                 });
             })
         );
     },
 
-    "async test with sandbox using mocha interface throwing error": function (
-        done
-    ) {
-        var it = function (title, fn) {
-            var mochaDone = function (args) {
+    "async test with sandbox using mocha interface throwing error"(done) {
+        const it = function (title, fn) {
+            const mochaDone = function (args) {
                 assert.isUndefined(args);
                 done(args);
             };
@@ -318,26 +314,26 @@ module.exports = {
 
         it(
             "works",
-            instance(function (callback) {
+            instance((callback) => {
                 callback();
             })
         );
     },
 
-    "async test with sandbox and spy": function (done) {
+    "async test with sandbox and spy"(done) {
         instance(function (callback) {
-            var globalObj = {
-                addOne: function (arg) {
+            const globalObj = {
+                addOne(arg) {
                     return this.addOneInner(arg);
                 },
-                addOneInner: function (arg) {
+                addOneInner(arg) {
                     return arg + 1;
                 },
             };
-            var addOneInnerSpy = this.spy();
+            const addOneInnerSpy = this.spy();
             this.stub(globalObj, "addOneInner").callsFake(addOneInnerSpy);
 
-            nextTick(function () {
+            nextTick(() => {
                 globalObj.addOne(41);
                 assert(addOneInnerSpy.calledOnce);
                 callback();
@@ -345,59 +341,54 @@ module.exports = {
         }).call({}, done);
     },
 
-    "async test preserves additional args and pass them in correct order":
-        function (done) {
-            instance(function (arg1, arg2, callback) {
-                assert.equals(arg1, "arg1");
-                assert.equals(typeof arg2, "object");
-                assert.equals(typeof callback, "function");
+    "async test preserves additional args and pass them in correct order"(
+        done
+    ) {
+        instance((arg1, arg2, callback) => {
+            assert.equals(arg1, "arg1");
+            assert.equals(typeof arg2, "object");
+            assert.equals(typeof callback, "function");
 
-                callback();
-            }).call({}, "arg1", {}, done);
-        },
+            callback();
+        }).call({}, "arg1", {}, done);
+    },
 
-    "async tests should allow thenables to be returned without a callback function":
-        function () {
-            // eslint-disable-next-line no-unused-vars
-            var test = instance(function (_) {
-                return Promise.resolve(true);
-            });
+    "async tests should allow thenables to be returned without a callback function"() {
+        // eslint-disable-next-line no-unused-vars
+        const test = instance((_) => Promise.resolve(true));
 
-            var dummy = "this is not a callback function";
-            refute.exception(function () {
-                test(dummy);
-            }, "hei");
-        },
+        const dummy = "this is not a callback function";
+        refute.exception(() => {
+            test(dummy);
+        }, "hei");
+    },
 
-    "async tests should not allow thenables to be returned with a callback function":
-        function () {
-            var thenable = {
-                // eslint-disable-next-line no-empty-function
-                then: function () {},
-            };
-            // eslint-disable-next-line no-unused-vars
-            var test = instance(function (_) {
-                return thenable;
-            });
-
+    "async tests should not allow thenables to be returned with a callback function"() {
+        const thenable = {
             // eslint-disable-next-line no-empty-function
-            function callback() {}
-            assert.exception(
-                function () {
-                    test(callback);
-                },
-                {
-                    message: /callback .* promise.* both/,
-                }
-            );
-        },
+            then() {},
+        };
+        // eslint-disable-next-line no-unused-vars
+        const test = instance((_) => thenable);
+
+        // eslint-disable-next-line no-empty-function
+        function callback() {}
+        assert.exception(
+            () => {
+                test(callback);
+            },
+            {
+                message: /callback .* promise.* both/,
+            }
+        );
+    },
 
     "sync tests with thenable return value": {
-        beforeEach: function () {
+        beforeEach() {
             // eslint-disable-next-line no-empty-function
-            var method = (this.method = function () {});
-            var object = (this.object = { method: method });
-            var promise = (this.promise = stubPromise());
+            const method = (this.method = function () {});
+            const object = (this.object = { method });
+            const promise = (this.promise = stubPromise());
 
             this.sinonTest = instance(function () {
                 this.stub(object, "method");
@@ -406,16 +397,16 @@ module.exports = {
             });
         },
 
-        afterEach: function () {
+        afterEach() {
             // ensure sandbox is restored
             if (this.promise.index < this.promise.then.callCount) {
                 this.promise.resolve();
             }
         },
 
-        "should listen to returned promise": function (done) {
-            var self = this;
-            var promise = self.sinonTest.call({});
+        "should listen to returned promise"(done) {
+            const self = this;
+            const promise = self.sinonTest.call({});
 
             assert(promise.then.calledOnce);
             assert(promise.then.getCall(0).args.length, 2);
@@ -423,7 +414,7 @@ module.exports = {
             assert.isFunction(promise.then.getCall(0).args[1]);
 
             // allow any other actions to take place
-            nextTick(function () {
+            nextTick(() => {
                 refute.same(
                     self.object.method,
                     self.method,
@@ -434,20 +425,20 @@ module.exports = {
             });
         },
 
-        "restores sandbox after promise is fulfilled": function () {
-            var promise = this.sinonTest.call({});
+        "restores sandbox after promise is fulfilled"() {
+            const promise = this.sinonTest.call({});
 
             promise.resolve();
 
             assert.same(this.object.method, this.method);
         },
 
-        "restores sandbox after promise is rejected": function () {
-            var promise = this.sinonTest.call({});
-            var error = new Error("expected");
+        "restores sandbox after promise is rejected"() {
+            const promise = this.sinonTest.call({});
+            const error = new Error("expected");
 
             assert.exception(
-                function () {
+                () => {
                     promise.reject(error);
                 },
                 { message: "expected" },
@@ -457,11 +448,11 @@ module.exports = {
             assert.same(this.object.method, this.method);
         },
 
-        "ensures test rejects with a non-falsy value": function () {
-            var promise = this.sinonTest.call({});
+        "ensures test rejects with a non-falsy value"() {
+            const promise = this.sinonTest.call({});
 
             assert.exception(
-                function () {
+                () => {
                     promise.reject(false);
                 },
                 { message: /rejected.*falsy/ }
@@ -472,7 +463,7 @@ module.exports = {
     },
 
     "sync tests with A+ promise returned": {
-        beforeEach: function () {
+        beforeEach() {
             if (typeof Promise === "undefined") {
                 this.skip();
             }
@@ -482,20 +473,20 @@ module.exports = {
             this.object = { method: this.method };
         },
 
-        "restores the sandbox when the promise is fulfilled": function (done) {
-            var self = this;
-            var expected = {};
-            var test = instance(function () {
-                var sandbox = this;
+        "restores the sandbox when the promise is fulfilled"(done) {
+            const self = this;
+            const expected = {};
+            const test = instance(function () {
+                const sandbox = this;
 
-                return new Promise(function (resolve) {
+                return new Promise((resolve) => {
                     sandbox.stub(self.object, "method");
 
                     resolve(expected);
                 });
             });
 
-            test.call({}).then(function (thing) {
+            test.call({}).then((thing) => {
                 assert.equals(self.object.method, self.method);
                 assert.same(thing, expected);
 
@@ -503,32 +494,30 @@ module.exports = {
             });
         },
 
-        "restores the sandbox when the promise is rejected": function (done) {
-            var self = this;
-            var test = instance(function () {
-                var sandbox = this;
+        "restores the sandbox when the promise is rejected"(done) {
+            const self = this;
+            const test = instance(function () {
+                const sandbox = this;
 
-                return new Promise(function (_, reject) {
+                return new Promise((_, reject) => {
                     sandbox.stub(self.object, "method");
 
                     reject(new Error("Some error"));
                 });
             });
 
-            test.call({}).catch(function () {
+            test.call({}).catch(() => {
                 assert.equals(self.object.method, self.method);
 
                 done();
             });
         },
 
-        "ensures test rejects with a non-falsy value": function (done) {
-            var self = this;
-            var test = instance(function () {
-                return Promise.reject(false);
-            });
+        "ensures test rejects with a non-falsy value"(done) {
+            const self = this;
+            const test = instance(() => Promise.reject(false));
 
-            test.call({}).catch(function (error) {
+            test.call({}).catch((error) => {
                 assert.match(error.message, /rejected.*falsy/);
                 assert.same(self.object.method, self.method);
 
@@ -536,25 +525,23 @@ module.exports = {
             });
         },
 
-        "re-throws the error if the promise is rejected": function (done) {
-            var expectedError = new Error("expected");
-            var test = instance(function () {
-                return Promise.reject(expectedError);
-            });
+        "re-throws the error if the promise is rejected"(done) {
+            const expectedError = new Error("expected");
+            const test = instance(() => Promise.reject(expectedError));
 
-            test.call({}).catch(function (error) {
+            test.call({}).catch((error) => {
                 assert.equals(error, expectedError);
 
                 done();
             });
         },
 
-        "verifies mocks when promise is resolved": function (done) {
-            var self = this;
-            var test = instance(function () {
-                var sandbox = this;
+        "verifies mocks when promise is resolved"(done) {
+            const self = this;
+            const test = instance(function () {
+                const sandbox = this;
 
-                return new Promise(function (resolve) {
+                return new Promise((resolve) => {
                     sandbox
                         .mock(self.object)
                         .expects("method")
@@ -567,7 +554,7 @@ module.exports = {
                 });
             });
 
-            test.call({}).catch(function (error) {
+            test.call({}).catch((error) => {
                 assert.equals(error.name, "ExpectationError");
                 assert.match(error.message, /Expected method\(1\) once/);
 
@@ -576,11 +563,11 @@ module.exports = {
         },
     },
 
-    "verifies mocks": function () {
+    "verifies mocks"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
-        var exception;
+        const method = function () {};
+        const object = { method };
+        let exception;
 
         try {
             instance(function () {
@@ -600,46 +587,46 @@ module.exports = {
         assert.same(object.method, method);
     },
 
-    "restores mocks": function () {
+    "restores mocks"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
         try {
             instance(function () {
                 this.mock(object).expects("method");
             }).call({});
-        } catch (e) {} // eslint-disable-line no-empty
+        } catch {} // eslint-disable-line no-empty
 
         assert.same(object.method, method);
     },
 
-    "restores mock when method throws": function () {
+    "restores mock when method throws"() {
         // eslint-disable-next-line no-empty-function
-        var method = function () {};
-        var object = { method: method };
+        const method = function () {};
+        const object = { method };
 
         try {
             instance(function () {
                 this.mock(object).expects("method").never();
                 object.method();
             }).call({});
-        } catch (e) {} // eslint-disable-line no-empty
+        } catch {} // eslint-disable-line no-empty
 
         assert.same(object.method, method);
     },
 
-    "appends helpers after normal arguments": function () {
+    "appends helpers after normal arguments"() {
         // eslint-disable-next-line no-empty-function
-        var object = { method: function () {} };
-        var config = {
+        const object = { method() {} };
+        const config = {
             injectIntoThis: false,
             properties: ["stub", "mock"],
         };
 
-        var testInstance = sinonTest(sinon, config);
+        const testInstance = sinonTest(sinon, config);
 
-        testInstance(function (obj, stub, mock) {
+        testInstance((obj, stub, mock) => {
             mock(object).expects("method").once();
             object.method();
 
@@ -647,8 +634,8 @@ module.exports = {
         })(object);
     },
 
-    "maintains the this value": function () {
-        var testCase = {
+    "maintains the this value"() {
+        const testCase = {
             someTest: instance(function () {
                 return this;
             }),
@@ -658,17 +645,17 @@ module.exports = {
     },
 
     "configurable test with sandbox": {
-        "yields stub, mock as arguments": function () {
-            var stubbed, mocked;
+        "yields stub, mock as arguments"() {
+            let stubbed, mocked;
             // eslint-disable-next-line no-empty-function
-            var obj = { meth: function () {} };
+            const obj = { meth() {} };
 
-            var config = {
+            const config = {
                 injectIntoThis: false,
                 properties: ["stub", "mock"],
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             testInstance(function (stub, mock) {
                 stubbed = stub(obj, "meth");
@@ -681,17 +668,17 @@ module.exports = {
             assert.mock(mocked);
         },
 
-        "yields spy, stub, mock as arguments": function () {
-            var spied, stubbed, mocked;
+        "yields spy, stub, mock as arguments"() {
+            let spied, stubbed, mocked;
             // eslint-disable-next-line no-empty-function
-            var obj = { meth: function () {} };
+            const obj = { meth() {} };
 
-            var config = {
+            const config = {
                 injectIntoThis: false,
                 properties: ["spy", "stub", "mock"],
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             testInstance(function (spy, stub, mock) {
                 spied = spy(obj, "meth");
@@ -707,18 +694,18 @@ module.exports = {
             assert.mock(mocked);
         },
 
-        "does not yield server when not faking xhr": function () {
-            var stubbed, mocked;
+        "does not yield server when not faking xhr"() {
+            let stubbed, mocked;
             // eslint-disable-next-line no-empty-function
-            var obj = { meth: function () {} };
+            const obj = { meth() {} };
 
-            var config = {
+            const config = {
                 injectIntoThis: false,
                 properties: ["server", "stub", "mock"],
                 useFakeServer: false,
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             testInstance(function (stub, mock) {
                 stubbed = stub(obj, "meth");
@@ -732,29 +719,28 @@ module.exports = {
         },
 
         "backwards compatibility": {
-            "uses the new factory methods introduced in 3.1 - if available":
-                function () {
-                    var fakeSinon = { createSandbox: sinon.stub() };
-                    var testInstance = sinonTest(fakeSinon);
-
-                    try {
-                        // eslint-disable-next-line no-empty-function
-                        testInstance(function () {})();
-                    } catch (err) {
-                        /* ignore */
-                    }
-
-                    assert(fakeSinon.createSandbox.called);
-                },
-
-            "falls back to the old 1.x-2.x methods when needed ": function () {
-                var fakeSinon = { sandbox: { create: sinon.stub() } };
-                var testInstance = sinonTest(fakeSinon);
+            "uses the new factory methods introduced in 3.1 - if available"() {
+                const fakeSinon = { createSandbox: sinon.stub() };
+                const testInstance = sinonTest(fakeSinon);
 
                 try {
                     // eslint-disable-next-line no-empty-function
-                    testInstance(function () {})();
-                } catch (err) {
+                    testInstance(() => {})();
+                } catch {
+                    /* ignore */
+                }
+
+                assert(fakeSinon.createSandbox.called);
+            },
+
+            "falls back to the old 1.x-2.x methods when needed "() {
+                const fakeSinon = { sandbox: { create: sinon.stub() } };
+                const testInstance = sinonTest(fakeSinon);
+
+                try {
+                    // eslint-disable-next-line no-empty-function
+                    testInstance(() => {})();
+                } catch {
                     /* ignore */
                 }
 
@@ -763,17 +749,17 @@ module.exports = {
         },
 
         "browser options": {
-            "yields server when faking xhr": function () {
-                var stubbed, mocked, server;
+            "yields server when faking xhr"() {
+                let stubbed, mocked, server;
                 // eslint-disable-next-line no-empty-function
-                var obj = { meth: function () {} };
+                const obj = { meth() {} };
 
-                var config = {
+                const config = {
                     injectIntoThis: false,
                     properties: ["server", "stub", "mock"],
                 };
 
-                var testInstance = sinonTest(sinon, config);
+                const testInstance = sinonTest(sinon, config);
 
                 testInstance(function (serv, stub, mock) {
                     server = serv;
@@ -788,18 +774,18 @@ module.exports = {
                 assert.mock(mocked);
             },
 
-            "uses serverWithClock when faking xhr": function () {
-                var server;
+            "uses serverWithClock when faking xhr"() {
+                let server;
 
-                var config = {
+                const config = {
                     injectIntoThis: false,
                     properties: ["server"],
                     useFakeServer: sinon.fakeServerWithClock,
                 };
 
-                var testInstance = sinonTest(sinon, config);
+                const testInstance = sinonTest(sinon, config);
 
-                testInstance(function (serv) {
+                testInstance((serv) => {
                     server = serv;
                 })();
 
@@ -807,10 +793,10 @@ module.exports = {
                 assert(sinon.fakeServerWithClock.isPrototypeOf(server));
             },
 
-            "injects properties into object": function () {
-                var obj = {};
+            "injects properties into object"() {
+                const obj = {};
 
-                var config = {
+                const config = {
                     injectIntoThis: false,
                     injectInto: obj,
                     properties: [
@@ -823,7 +809,7 @@ module.exports = {
                     ],
                 };
 
-                var testInstance = sinonTest(sinon, config);
+                const testInstance = sinonTest(sinon, config);
 
                 function testFunction() {
                     assert.equals(arguments.length, 0);
@@ -844,13 +830,13 @@ module.exports = {
                 testInstance(testFunction).call({});
             },
 
-            "injects server and clock when only enabling them": function () {
-                var config = {
+            "injects server and clock when only enabling them"() {
+                const config = {
                     useFakeTimers: true,
                     useFakeServer: true,
                 };
 
-                var testInstance = sinonTest(sinon, config);
+                const testInstance = sinonTest(sinon, config);
 
                 function testFunction() {
                     assert.equals(arguments.length, 0);
@@ -867,15 +853,15 @@ module.exports = {
             },
         },
 
-        "yields clock when faking timers": function () {
-            var clock;
+        "yields clock when faking timers"() {
+            let clock;
 
-            var config = {
+            const config = {
                 injectIntoThis: false,
                 properties: ["clock"],
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             testInstance(function (c) {
                 clock = c;
@@ -885,10 +871,10 @@ module.exports = {
             assert.clock(clock);
         },
 
-        "fakes specified timers": function () {
-            var props;
+        "fakes specified timers"() {
+            let props;
 
-            var config = {
+            const config = {
                 injectIntoThis: false,
                 properties: ["clock"],
                 useFakeTimers: {
@@ -896,14 +882,14 @@ module.exports = {
                 },
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
-            testInstance(function (c) {
+            testInstance((c) => {
                 props = {
                     clock: c,
-                    Date: Date,
-                    setTimeout: setTimeout,
-                    clearTimeout: clearTimeout,
+                    Date,
+                    setTimeout,
+                    clearTimeout,
                     // clear & setImmediate are not yet available in all environments
                     setImmediate:
                         typeof setImmediate !== "undefined"
@@ -913,8 +899,8 @@ module.exports = {
                         typeof clearImmediate !== "undefined"
                             ? clearImmediate
                             : undefined,
-                    setInterval: setInterval,
-                    clearInterval: clearInterval,
+                    setInterval,
+                    clearInterval,
                 };
             })();
 
@@ -927,14 +913,14 @@ module.exports = {
             assert.same(props.clearInterval, sinon.timers.clearInterval);
         },
 
-        "injects properties into test case": function () {
-            var testCase = {};
+        "injects properties into test case"() {
+            const testCase = {};
 
-            var config = {
+            const config = {
                 properties: ["clock"],
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             function testFunction() {
                 assert.same(this, testCase);
@@ -948,7 +934,7 @@ module.exports = {
             testInstance(testFunction).call(testCase);
         },
 
-        "injects functions into test case by default": function () {
+        "injects functions into test case by default"() {
             function testFunction() {
                 assert.equals(arguments.length, 0);
                 assert.isFunction(this.spy);
@@ -960,27 +946,27 @@ module.exports = {
             instance(testFunction).call({});
         },
 
-        "injects sandbox": function () {
+        "injects sandbox"() {
             function testFunction() {
                 assert.equals(arguments.length, 0);
                 assert.isFunction(this.spy);
                 assert.isObject(this.sandbox);
             }
 
-            var config = {
+            const config = {
                 properties: ["sandbox", "spy"],
             };
 
-            var testInstance = sinonTest(sinon, config);
+            const testInstance = sinonTest(sinon, config);
 
             testInstance(testFunction).call({});
         },
 
-        "remove injected properties afterwards": function () {
-            var testCase = {};
+        "remove injected properties afterwards"() {
+            const testCase = {};
 
             // eslint-disable-next-line no-empty-function
-            instance(function () {}).call(testCase);
+            instance(() => {}).call(testCase);
 
             assert.isUndefined(testCase.spy);
             assert.isUndefined(testCase.stub);
@@ -991,17 +977,17 @@ module.exports = {
             assert.isUndefined(testCase.requests);
         },
 
-        "uses test to fake time": function () {
-            var config = {
+        "uses test to fake time"() {
+            const config = {
                 useFakeTimers: true,
             };
 
-            var testInstance = sinonTest(sinon, config);
-            var called;
+            const testInstance = sinonTest(sinon, config);
+            let called;
 
-            var testCase = {
+            const testCase = {
                 test: testInstance(function () {
-                    var spy = this.spy();
+                    const spy = this.spy();
                     setTimeout(spy, 19);
                     this.clock.tick(19);
 

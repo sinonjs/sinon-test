@@ -47,10 +47,10 @@ function stubPromise() {
 module.exports = {
     beforeEach() {
         this.boundTestCase = function () {
-            var properties = {
-                fn() {
+            const properties = {
+                fn(...args) {
                     properties.self = this;
-                    properties.args = arguments;
+                    properties.args = args;
                     properties.spy = this.spy;
                     properties.stub = this.stub;
                     properties.mock = this.mock;

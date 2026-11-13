@@ -1,9 +1,9 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
+const referee = require("@sinonjs/referee");
 
 referee.add("spy", {
-    assert: function (obj) {
+    assert(obj) {
         return (
             obj !== null && typeof obj.calledWith === "function" && !obj.returns
         );
@@ -13,7 +13,7 @@ referee.add("spy", {
 });
 
 referee.add("stub", {
-    assert: function (obj) {
+    assert(obj) {
         return (
             obj !== null &&
             typeof obj.calledWith === "function" &&
@@ -25,7 +25,7 @@ referee.add("stub", {
 });
 
 referee.add("mock", {
-    assert: function (obj) {
+    assert(obj) {
         return (
             obj !== null &&
             typeof obj.verify === "function" &&
@@ -37,7 +37,7 @@ referee.add("mock", {
 });
 
 referee.add("fakeServer", {
-    assert: function (obj) {
+    assert(obj) {
         return (
             obj !== null &&
             Object.prototype.toString.call(obj.requests) === "[object Array]" &&
@@ -49,7 +49,7 @@ referee.add("fakeServer", {
 });
 
 referee.add("clock", {
-    assert: function (obj) {
+    assert(obj) {
         return (
             obj !== null &&
             typeof obj.tick === "function" &&

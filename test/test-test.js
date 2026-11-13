@@ -316,7 +316,6 @@ module.exports = {
             }
         };
 
-        // eslint-disable-next-line mocha/no-identical-title
         it(
             "works",
             instance(function (callback) {
@@ -526,7 +525,6 @@ module.exports = {
         "ensures test rejects with a non-falsy value": function (done) {
             var self = this;
             var test = instance(function () {
-                //eslint-disable-next-line prefer-promise-reject-errors
                 return Promise.reject(false);
             });
 

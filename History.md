@@ -1,4 +1,11 @@
 
+4.0.0 / 2026-11-15
+==================
+
+  * Breaking changes require newer Sinon > 20
+  * Eslint config 8 (#206)
+  * Es2025 syntax (#205)
+
 3.1.6 / 2024-05-15
 ==================
 

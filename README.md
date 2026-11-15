@@ -48,7 +48,7 @@ it(
 
 Sinon will take care of removing all the spies and stubs
 from the wrapped functions for you. It does this by using
-a [Sinon sandbox](https://sinonjs.org/releases/latest/sandbox/) internally.
+a [Sinon sandbox](https://sinonjs.org/concepts/sandboxes) internally.
 
 Do notice that we use a `function` and not a arrow function (ES2015)
 when wrapping the test with `sinon.test` as it needs
@@ -75,7 +75,7 @@ If your test function takes any arguments, pass then to the `test` wrapper
 after the test function. If the last argument is a function, it is assumed to be a callback
 for an asynchronous test. The test function may also return a promise.
 
-See the [sinon documentation](https://sinonjs.org/releases/latest/sandbox/) for more documentation on sandboxes.
+See the [sinon documentation](https://sinonjs.org/concepts/sandboxes) for more documentation on sandboxes.
 
 `sinon-test` instances need to be configured with a `sinon` instance (version 20 or later)
 before they can be used.
@@ -134,7 +134,7 @@ only need to add an import statement:
 const test = require("sinon-test")(sinon);
 ```
 
-In order to [configure the sandbox](http://sinonjs.org/releases/latest/sandbox#var-sandbox--sinoncreatesandboxconfig) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
+In order to [configure the sandbox](https://sinonjs.org/concepts/sandboxes/create-sandbox#sinon-createsandbox-config) that is created, a configuration hash can be passed as a 2nd argument to `sinonTest`:
 
 ```js
 const test = require("sinon-test")(sinon, { useFakeTimers: false });

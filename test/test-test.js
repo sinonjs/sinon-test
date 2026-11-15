@@ -977,6 +977,19 @@ module.exports = {
             assert.isUndefined(testCase.requests);
         },
 
+        "remove injected properties when the test throws"() {
+            const testCase = {};
+
+            assert.exception(() => {
+                instance(() => {
+                    throw new Error("expected");
+                }).call(testCase);
+            });
+
+            assert.isUndefined(testCase.spy);
+            assert.isUndefined(testCase.clock);
+        },
+
         "uses test to fake time"() {
             const config = {
                 useFakeTimers: true,

@@ -20,3 +20,7 @@ var testFramework = {
 };
 
 for (var test in testFramework) testFramework[test].call(testFramework);
+
+// the sandbox properties are removed from the test context afterwards
+assert.equal(typeof testFramework.spy, "undefined");
+assert.equal(typeof testFramework.clock, "undefined");

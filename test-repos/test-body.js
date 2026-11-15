@@ -7,7 +7,9 @@ var testFramework = {
             ["stub", "spy", "mock"].forEach(function(func) {
                 assert.equal(typeof this[func], "function");
             }, this);
-            ["clock", "server"].forEach(function(name) {
+            // Sinon 20 removed the fake server, so only expect it when it exists
+            var fakes = sinon.fakeServer ? ["clock", "server"] : ["clock"];
+            fakes.forEach(function(name) {
                 assert.equal(typeof this[name], "object");
             }, this);
         }

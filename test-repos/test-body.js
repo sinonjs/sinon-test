@@ -7,11 +7,7 @@ var testFramework = {
             ["stub", "spy", "mock"].forEach(function(func) {
                 assert.equal(typeof this[func], "function");
             }, this);
-            // Sinon 20 removed the fake server, so only expect it when it exists
-            var fakes = sinon.fakeServer ? ["clock", "server"] : ["clock"];
-            fakes.forEach(function(name) {
-                assert.equal(typeof this[name], "object");
-            }, this);
+            assert.equal(typeof this.clock, "object");
         }
     ),
     "basic functionality should work": sinonTest(function myTestFunction() {
@@ -20,3 +16,7 @@ var testFramework = {
 };
 
 for (var test in testFramework) testFramework[test].call(testFramework);
+
+// the sandbox properties are removed from the test context afterwards
+assert.equal(typeof testFramework.spy, "undefined");
+assert.equal(typeof testFramework.clock, "undefined");

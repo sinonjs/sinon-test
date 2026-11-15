@@ -54,8 +54,6 @@ module.exports = {
                     properties.stub = this.stub;
                     properties.mock = this.mock;
                     properties.clock = this.clock;
-                    properties.server = this.server;
-                    properties.requests = this.requests;
                     properties.sandbox = this.sandbox;
                 },
             };
@@ -694,163 +692,63 @@ module.exports = {
             assert.mock(mocked);
         },
 
-        "does not yield server when not faking xhr"() {
-            let stubbed, mocked;
-            // eslint-disable-next-line no-empty-function
-            const obj = { meth() {} };
+        "creates the sandbox with createSandbox"() {
+            const fakeSinon = { createSandbox: sinon.stub() };
+            const testInstance = sinonTest(fakeSinon);
+
+            try {
+                // eslint-disable-next-line no-empty-function
+                testInstance(() => {})();
+            } catch {
+                /* ignore */
+            }
+
+            assert(fakeSinon.createSandbox.called);
+        },
+
+        "injects properties into object"() {
+            const obj = {};
 
             const config = {
                 injectIntoThis: false,
-                properties: ["server", "stub", "mock"],
-                useFakeServer: false,
+                injectInto: obj,
+                properties: ["clock", "spy", "stub", "mock"],
             };
 
             const testInstance = sinonTest(sinon, config);
 
-            testInstance(function (stub, mock) {
-                stubbed = stub(obj, "meth");
-                mocked = mock(obj);
+            function testFunction() {
+                assert.equals(arguments.length, 0);
+                assert.isUndefined(this.clock);
+                assert.isUndefined(this.spy);
+                assert.isUndefined(this.stub);
+                assert.isUndefined(this.mock);
+                assert.clock(obj.clock);
+                assert.isFunction(obj.spy);
+                assert.isFunction(obj.stub);
+                assert.isFunction(obj.mock);
+            }
 
-                assert.equals(arguments.length, 2);
-            })();
-
-            assert.stub(stubbed);
-            assert.mock(mocked);
+            testInstance(testFunction).call({});
         },
 
-        "backwards compatibility": {
-            "uses the new factory methods introduced in 3.1 - if available"() {
-                const fakeSinon = { createSandbox: sinon.stub() };
-                const testInstance = sinonTest(fakeSinon);
+        "injects clock when only enabling it"() {
+            const config = {
+                useFakeTimers: true,
+            };
 
-                try {
-                    // eslint-disable-next-line no-empty-function
-                    testInstance(() => {})();
-                } catch {
-                    /* ignore */
-                }
+            const testInstance = sinonTest(sinon, config);
 
-                assert(fakeSinon.createSandbox.called);
-            },
+            function testFunction() {
+                assert.equals(arguments.length, 0);
+                assert.isFunction(this.spy);
+                assert.isFunction(this.stub);
+                assert.isFunction(this.mock);
+                assert.clock(this.clock);
+                assert.isUndefined(this.sandbox);
+            }
 
-            "falls back to the old 1.x-2.x methods when needed "() {
-                const fakeSinon = { sandbox: { create: sinon.stub() } };
-                const testInstance = sinonTest(fakeSinon);
-
-                try {
-                    // eslint-disable-next-line no-empty-function
-                    testInstance(() => {})();
-                } catch {
-                    /* ignore */
-                }
-
-                assert(fakeSinon.sandbox.create.called);
-            },
-        },
-
-        "browser options": {
-            "yields server when faking xhr"() {
-                let stubbed, mocked, server;
-                // eslint-disable-next-line no-empty-function
-                const obj = { meth() {} };
-
-                const config = {
-                    injectIntoThis: false,
-                    properties: ["server", "stub", "mock"],
-                };
-
-                const testInstance = sinonTest(sinon, config);
-
-                testInstance(function (serv, stub, mock) {
-                    server = serv;
-                    stubbed = stub(obj, "meth");
-                    mocked = mock(obj);
-
-                    assert.equals(arguments.length, 3);
-                })();
-
-                assert.fakeServer(server);
-                assert.stub(stubbed);
-                assert.mock(mocked);
-            },
-
-            "uses serverWithClock when faking xhr"() {
-                let server;
-
-                const config = {
-                    injectIntoThis: false,
-                    properties: ["server"],
-                    useFakeServer: sinon.fakeServerWithClock,
-                };
-
-                const testInstance = sinonTest(sinon, config);
-
-                testInstance((serv) => {
-                    server = serv;
-                })();
-
-                assert.fakeServer(server);
-                assert(sinon.fakeServerWithClock.isPrototypeOf(server));
-            },
-
-            "injects properties into object"() {
-                const obj = {};
-
-                const config = {
-                    injectIntoThis: false,
-                    injectInto: obj,
-                    properties: [
-                        "server",
-                        "clock",
-                        "spy",
-                        "stub",
-                        "mock",
-                        "requests",
-                    ],
-                };
-
-                const testInstance = sinonTest(sinon, config);
-
-                function testFunction() {
-                    assert.equals(arguments.length, 0);
-                    assert.isUndefined(this.server);
-                    assert.isUndefined(this.clock);
-                    assert.isUndefined(this.spy);
-                    assert.isUndefined(this.stub);
-                    assert.isUndefined(this.mock);
-                    assert.isUndefined(this.requests);
-                    assert.fakeServer(obj.server);
-                    assert.clock(obj.clock);
-                    assert.isFunction(obj.spy);
-                    assert.isFunction(obj.stub);
-                    assert.isFunction(obj.mock);
-                    assert.isArray(obj.requests);
-                }
-
-                testInstance(testFunction).call({});
-            },
-
-            "injects server and clock when only enabling them"() {
-                const config = {
-                    useFakeTimers: true,
-                    useFakeServer: true,
-                };
-
-                const testInstance = sinonTest(sinon, config);
-
-                function testFunction() {
-                    assert.equals(arguments.length, 0);
-                    assert.isFunction(this.spy);
-                    assert.isFunction(this.stub);
-                    assert.isFunction(this.mock);
-                    assert.fakeServer(this.server);
-                    assert.isArray(this.requests);
-                    assert.clock(this.clock);
-                    assert.isUndefined(this.sandbox);
-                }
-
-                testInstance(testFunction).call({});
-            },
+            testInstance(testFunction).call({});
         },
 
         "yields clock when faking timers"() {
@@ -973,8 +871,19 @@ module.exports = {
             assert.isUndefined(testCase.mock);
             assert.isUndefined(testCase.sandbox);
             assert.isUndefined(testCase.clock);
-            assert.isUndefined(testCase.server);
-            assert.isUndefined(testCase.requests);
+        },
+
+        "remove injected properties when the test throws"() {
+            const testCase = {};
+
+            assert.exception(() => {
+                instance(() => {
+                    throw new Error("expected");
+                }).call(testCase);
+            });
+
+            assert.isUndefined(testCase.spy);
+            assert.isUndefined(testCase.clock);
         },
 
         "uses test to fake time"() {

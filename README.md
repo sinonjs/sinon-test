@@ -48,7 +48,7 @@ it(
 
 Sinon will take care of removing all the spies and stubs
 from the wrapped functions for you. It does this by using
-`sinon.sandbox` internally.
+a [Sinon sandbox](https://sinonjs.org/releases/latest/sandbox/) internally.
 
 Do notice that we use a `function` and not a arrow function (ES2015)
 when wrapping the test with `sinon.test` as it needs
@@ -75,9 +75,9 @@ If your test function takes any arguments, pass then to the `test` wrapper
 after the test function. If the last argument is a function, it is assumed to be a callback
 for an asynchronous test. The test function may also return a promise.
 
-See the [sinon documentation](http://sinonjs.org/releases/v2.3.5/sandbox/) for more documentation on sandboxes.
+See the [sinon documentation](https://sinonjs.org/releases/latest/sandbox/) for more documentation on sandboxes.
 
-`sinon-test` instances need to be configured with a `sinon` instance (version 2+)
+`sinon-test` instances need to be configured with a `sinon` instance (version 20 or later)
 before they can be used.
 
 ```js
@@ -141,6 +141,11 @@ const test = require("sinon-test")(sinon, { useFakeTimers: false });
 ```
 
 The only difference to the standard configuration object for Sinon's sandbox is the addition of the `injectIntoThis` property, which is used to inject the sandbox' props into the context object (`this`).
+
+### Upgrading from sinon-test 3
+
+-   Sinon 20 or later is required. Sinon 20 removed the fake server, so `this.server` and `this.requests` are no longer injected, and the `useFakeServer` option is gone. Use a dedicated HTTP mocking library instead.
+-   Sinon 1.x and 2.x (`sinon.sandbox.create`) are no longer supported.
 
 ### Backwards compatibility
 

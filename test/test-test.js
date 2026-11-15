@@ -3,7 +3,6 @@
 const sinonTest = require("../");
 const referee = require("@sinonjs/referee");
 const sinon = require("sinon");
-const Promise = require("es6-promise").Promise;
 
 const nextTick =
     (typeof process !== "undefined" && process.nextTick) ||
@@ -515,6 +514,7 @@ module.exports = {
 
         "ensures test rejects with a non-falsy value"(done) {
             const self = this;
+            // eslint-disable-next-line prefer-promise-reject-errors -- tests a falsy rejection
             const test = instance(() => Promise.reject(false));
 
             test.call({}).catch((error) => {

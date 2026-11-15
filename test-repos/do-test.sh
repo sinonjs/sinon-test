@@ -1,9 +1,6 @@
 #!/bin/bash
-# Verify that this version of sinon-test works with external libraries
-#
-# This script cannot run on Circle CI as a build step
-# See https://circleci.com/gh/sinonjs/sinon-test/918
-# The reason is that `npm link` is not allowed by the container
+# Verify that this version of sinon-test works with the latest Sinon,
+# both from source and from the bundles, as CommonJS and as ES modules
 
 set -e; # exit on errors
 set -x
@@ -14,9 +11,8 @@ pushd "$SCRIPT_DIR" > /dev/null
 
 main(){
     build_test_files
-    link_local_sinon_test
-    run_test_with_local_version
-    cleanup
+    build_dist
+    run_test_with_latest_sinon
 }
 
 build_test_files(){
@@ -26,20 +22,15 @@ build_test_files(){
     cat umd-bundle-pre.js test-body.js > test-bundle.js
 }
 
-link_local_sinon_test(){
+# the bundle tests import ../dist, which `npm version` does not rebuild
+build_dist(){
     cd "$SCRIPT_DIR"/..
-    npm link # create a global symlink to the local sinon-test project
+    npm run build
 }
 
-cleanup(){
-    cd "$SCRIPT_DIR"/..
-    npm unlink sinon-test
-}
-
-run_test_with_local_version(){
+run_test_with_latest_sinon(){
     cd "$SCRIPT_DIR"
-    npm install
-    npm link sinon-test # use local version
+    npm install --no-audit --no-fund
     npm test
 }
 

@@ -1,6 +1,12 @@
 name: Node CI
 
-on: [push]
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - "**"
 
 permissions:
     contents: read
@@ -9,17 +15,13 @@ jobs:
     prettier:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  node-version: "20"
-            - name: Cache modules
-              uses: actions/cache@v2
+                  persist-credentials: false
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+                  node-version: "lts/*"
+                  cache: "npm"
             - name: Install dependencies
               run: |
                   npm ci
@@ -32,17 +34,13 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  node-version: "20"
-            - name: Cache modules
-              uses: actions/cache@v2
+                  persist-credentials: false
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+                  node-version: "lts/*"
+                  cache: "npm"
             - name: Install dependencies
               run: |
                   npm ci
@@ -55,48 +53,64 @@ jobs:
     coverage:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  node-version: "20"
-            - name: Cache npm
-              uses: actions/cache@v2
+                  persist-credentials: false
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+                  node-version: "lts/*"
+                  cache: "npm"
             - name: Install dependencies
               run: |
                   npm ci
               env:
                   HUSKY_SKIP_INSTALL: 1
-            - name: Integration
+            - name: Coverage
               run: |
                   npm run test-coverage
             - name: Upload coverage report
-              run: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
+              uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+              with:
+                  files: ./coverage/lcov.info
+                  flags: unit
+                  fail_ci_if_error: false
+                  token: ${{ secrets.CODECOV_TOKEN }}
+
+    integration:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+              with:
+                  node-version: "lts/*"
+                  cache: "npm"
+            - name: Install dependencies
+              run: |
+                  npm ci
+              env:
+                  HUSKY_SKIP_INSTALL: 1
+            - name: Integration test with the latest Sinon
+              run: |
+                  npm run integration-test
 
     test:
         runs-on: ubuntu-latest
 
         strategy:
             matrix:
-                node-version: [16, 18, 20, 22]
+                node-version: [22, 24, 26]
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
                   node-version: ${{ matrix.node-version }}
-            - name: Cache modules
-              uses: actions/cache@v2
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+                  cache: "npm"
             - name: Install dependencies
               run: |
                   npm ci
